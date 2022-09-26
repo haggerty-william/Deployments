@@ -1,0 +1,101 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: cache-api
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cache-api
+  template:
+    metadata:
+      labels:
+        app: cache-api
+    spec:
+      containers:
+        - name: cache-api
+          image: ghcr.io/phoeniqstech/sql-cache:v0.0.3
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
+            - name: PdxAppName
+              value: cache-api
+            - name: PdxAppType
+              value: logincache
+            - name: PdxClientGroup
+              value: default
+            - name: PdxLogApiAddress
+              value: http://logging-api:6060/Log
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxDbServer
+              value: mysql.mysql
+            - name: PdxDbUser
+              value: root
+            - name: PdxDbPassword
+              value: easlTmysql01
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
+  updateStrategy:
+    type: RollingUpdate
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: cache-api
+  namespace: default
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    app: cache-api
+  type: LoadBalancer
+status:
+  loadBalancer:
+    ingress:
+      - ip: 10.10.1.37
