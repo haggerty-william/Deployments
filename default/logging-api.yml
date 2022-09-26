@@ -10,7 +10,6 @@ spec:
       app: logging-api
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: logging-api
     spec:
@@ -38,89 +37,22 @@ spec:
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
             - name: PdxServiceAccountName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
-
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: logging-api
-  namespace: default
-spec:
-  selector:
-    matchLabels:
-      app: logging-api
-  template:
-    metadata:
-      labels:
-        app: logging-api
-    spec:
-      containers:
-        - name: logging-api
-          image: ghcr.io/phoeniqstech/logging-api:v1.0.4
-          ports:
-            - containerPort: 5000
-              protocol: TCP
-          env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Development
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
-            - name: PdxAppName
-              value: logging-api
-            - name: PdxAppType
-              value: logging
-            - name: PdxClientGroup
-              value: default
-            - name: PdxDbApiAddress
-              value: http://database-api
-            - name: PdxConfigLogUpdate
-              value: 'true'
-            - name: PdxNodeName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.nodeName
-            - name: PdxPodName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.name
-            - name: PdxNamespace
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.namespace
-            - name: PdxPodIP
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.serviceAccountName
 
 ---
@@ -138,6 +70,3 @@ spec:
   type: ClusterIP
   selector:
     app: logging-api
-
-
-            
