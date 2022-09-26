@@ -1,0 +1,83 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: database-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database-api
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: database-api
+    spec:
+      containers:
+        - name: database-api
+          image: ghcr.io/phoeniqstech/database-api:v1.0.5
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: PdxDbServer
+              value: mysql.mysql
+            - name: PdxDbUser
+              value: root
+            - name: PdxDbPassword
+              value: easlTmysql01
+            - name: PdxLogApiAddress
+              value: http://logging-api:6060/Log
+            - name: PdxClientGroup
+              value: default
+            - name: PdxAppType
+              value: database-api
+            - name: PdxAppName
+              value: database-api
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-api
+  namespace: default
+spec:
+  ports:
+    - name: http
+      port: 5050
+      targetPort: 5000
+      protocol: TCP
+  type: ClusterIP
+  selector:
+    app: database-api
