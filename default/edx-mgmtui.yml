@@ -1,21 +1,21 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: auth-api
+  name: edx-mgmtui
   namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: auth-api
+      app: edx-mgmtui
   template:
     metadata:
       labels:
-        app: auth-api
+        app: edx-mgmtui
     spec:
       containers:
-        - name: auth-api
-          image: ghcr.io/phoeniqstech/auth-api:v0.0.10
+        - name: edx-mgmtui
+          image: ghcr.io/phoeniqstech/edx-mgmtui:v1.0.23
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -25,23 +25,19 @@ spec:
             - name: ASPNETCORE_URLS
               value: http://+:5000
             - name: PdxAppName
-              value: auth-api
+              value: edx-mgmtui
             - name: PdxAppType
-              value: auth
+              value: mgmt
             - name: PdxClientGroup
               value: default
-            - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxAuthApiAddress
+              value: http://auth-api
+            - name: PdxLogApiAddress
+              value: http://logging-api:6060/Log
             - name: PdxConfigLogUpdate
               value: 'true'
-            - name: PdxDbServer
-              value: mysql.mysql
-            - name: PdxDbUser
-              value: root
-            - name: PdxDbPassword
-              value: easlTmysql01
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -69,11 +65,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
+              cpu: '8'
+              memory: 1Gi
+            requests:
               cpu: '1'
               memory: 512Mi
-            requests:
-              cpu: 200m
-              memory: 256Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
@@ -82,7 +78,7 @@ spec:
 kind: Service
 apiVersion: v1
 metadata:
-  name: auth-api
+  name: edx-mgmtui
   namespace: default
 spec:
   ports:
@@ -91,6 +87,6 @@ spec:
       port: 80
       targetPort: 5000
   selector:
-    app: auth-api
+    app: edx-mgmtui
   type: LoadBalancer
-  loadBalancerIP: 10.10.1.25
+  loadBalancerIP: 10.10.1.59

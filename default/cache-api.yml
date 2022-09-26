@@ -95,7 +95,4 @@ spec:
   selector:
     app: cache-api
   type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-      - ip: 10.10.1.37
+  loadBalancerIP: 10.10.1.37
