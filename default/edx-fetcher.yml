@@ -1,0 +1,69 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: edx-fetcher
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-fetcher
+  template:
+    metadata:
+      labels:
+        app: edx-fetcher
+    spec:
+      containers:
+        - name: edx-fetcher
+          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.23
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: PdxAppName
+              value: edx-fetcher
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: default
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api.default:6060/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '4'
+              memory: 4Gi
+            requests:
+              cpu: '1'
+              memory: 4Gi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
