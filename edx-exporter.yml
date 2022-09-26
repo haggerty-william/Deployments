@@ -1,47 +1,36 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: auth-api
+  name: edx-exporter
   namespace: default
 spec:
-  replicas: 1
+  replicas: 4
   selector:
     matchLabels:
-      app: auth-api
+      app: edx-exporter
   template:
     metadata:
       labels:
-        app: auth-api
+        app: edx-exporter
     spec:
       containers:
-        - name: auth-api
-          image: ghcr.io/phoeniqstech/auth-api:v0.0.10
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-exporter
+          image: ghcr.io/phoeniqstech/edx-exporter:v1.0.23
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
             - name: PdxAppName
-              value: auth-api
+              value: edx-exporter
             - name: PdxAppType
-              value: auth
+              value: edx
             - name: PdxClientGroup
               value: default
-            - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api:6060/Log
             - name: PdxConfigLogUpdate
               value: 'true'
-            - name: PdxDbServer
-              value: mysql.mysql
-            - name: PdxDbUser
-              value: root
-            - name: PdxDbPassword
-              value: easlTmysql01
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -69,31 +58,12 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '1'
-              memory: 512Mi
+              cpu: '8'
+              memory: 2Gi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: '1'
+              memory: 2Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: auth-api
-  namespace: default
-spec:
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 5000
-  selector:
-    app: auth-api
-  type: LoadBalancer
-status:
-  loadBalancer:
-    ingress:
-      - ip: 10.10.1.25

@@ -12,8 +12,6 @@ spec:
     metadata:
       labels:
         app: edx-transformer
-      annotations:
-        date: '1660144573'
     spec:
       containers:
         - name: edx-transformer

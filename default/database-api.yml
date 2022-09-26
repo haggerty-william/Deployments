@@ -10,7 +10,6 @@ spec:
       app: database-api
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: database-api
     spec:
