@@ -4,7 +4,7 @@ metadata:
   name: database-api
   namespace: default
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: database-api
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.0.5
+          image: ghcr.io/phoeniqstech/database-api:v1.0.6
           ports:
             - containerPort: 5000
               protocol: TCP
