@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: edx-transformer
+  namespace: leaflink
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-transformer
+  template:
+    metadata:
+      labels:
+        app: edx-transformer
+    spec:
+      containers:
+        - name: edx-transformer
+          image: ghcr.io/phoeniqstech/edx-transformer:v1.0.22
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: PdxAppName
+              value: edx-transformer
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: default
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '4'
+              memory: 2Gi
+            requests:
+              cpu: '1'
+              memory: 2Gi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      serviceAccountName: service-discovery-account
+      serviceAccount: service-discovery-account
+      imagePullSecrets:
+        - name: regcred

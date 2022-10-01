@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: edx-mgmtui
-  namespace: default
+  namespace: leaflink
 spec:
   ports:
     - name: http

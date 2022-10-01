@@ -3,7 +3,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: auth-api
-  namespace: default
+  namespace: leaflink
 spec:
   ports:
     - name: http

@@ -1,34 +1,41 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-exporter
-  namespace: default
+  name: edx-mgmtui
+  namespace: leaflink
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-exporter
+      app: edx-mgmtui
   template:
     metadata:
       labels:
-        app: edx-exporter
+        app: edx-mgmtui
     spec:
       containers:
-        - name: edx-exporter
-          image: ghcr.io/phoeniqstech/edx-exporter:v1.0.23
+        - name: edx-mgmtui
+          image: ghcr.io/phoeniqstech/edx-mgmtui:v1.0.24
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-exporter
+              value: edx-mgmtui
             - name: PdxAppType
-              value: edx
+              value: mgmt
             - name: PdxClientGroup
               value: default
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxAuthApiAddress
+              value: http://auth-api
             - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
+              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
@@ -59,13 +66,11 @@ spec:
           resources:
             limits:
               cpu: '8'
-              memory: 2Gi
+              memory: 1Gi
             requests:
               cpu: '1'
-              memory: 2Gi
+              memory: 512Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred

@@ -1,26 +1,26 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-transformer
-  namespace: default
+  name: edx-jobdispatcher
+  namespace: leaflink
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-transformer
+      app: edx-jobdispatcher
   template:
     metadata:
       labels:
-        app: edx-transformer
+        app: edx-jobdispatcher
     spec:
       containers:
-        - name: edx-transformer
-          image: ghcr.io/phoeniqstech/edx-transformer:v1.0.22
+        - name: edx-jobdispatcher
+          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.0.24
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
             - name: PdxAppName
-              value: edx-transformer
+              value: edx-jobdispatcher
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
@@ -58,14 +58,12 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '4'
-              memory: 2Gi
-            requests:
               cpu: '1'
-              memory: 2Gi
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred

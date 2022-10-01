@@ -1,36 +1,47 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-jobdispatcher
-  namespace: default
+  name: cache-api
+  namespace: leaflink
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-jobdispatcher
+      app: cache-api
   template:
     metadata:
       labels:
-        app: edx-jobdispatcher
+        app: cache-api
     spec:
       containers:
-        - name: edx-jobdispatcher
-          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.0.24
+        - name: cache-api
+          image: ghcr.io/phoeniqstech/sql-cache:v0.0.3
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-jobdispatcher
+              value: cache-api
             - name: PdxAppType
-              value: edx
+              value: logincache
             - name: PdxClientGroup
               value: default
-            - name: PdxDbApiAddress
-              value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxDbApiAddress
+              value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxDbServer
+              value: mysql.mysql
+            - name: PdxDbUser
+              value: root
+            - name: PdxDbPassword
+              value: easlTmysql01
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -67,3 +78,5 @@ spec:
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred
+  updateStrategy:
+    type: RollingUpdate

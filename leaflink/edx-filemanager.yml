@@ -1,41 +1,35 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: default
+  name: edx-filemanager
+  namespace: leaflink
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: edx-filemanager
   template:
     metadata:
+      creationTimestamp: null
       labels:
-        app: edx-mgmtui
+        app: edx-filemanager
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/phoeniqstech/edx-mgmtui:v1.0.24
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-filemanager
+          image: ghcr.io/phoeniqstech/edx-filemanager:v1.0.9
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Development
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
+              value: Release
             - name: PdxAppName
-              value: edx-mgmtui
+              value: edx-filemanager
             - name: PdxAppType
-              value: mgmt
+              value: edx
             - name: PdxClientGroup
               value: default
-            - name: PdxDbApiAddress
-              value: http://database-api
-            - name: PdxAuthApiAddress
-              value: http://auth-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxDbApiAddress
+              value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
@@ -65,12 +59,15 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '8'
-              memory: 1Gi
+              cpu: '2'
+              memory: 2Gi
             requests:
-              cpu: '1'
-              memory: 512Mi
-          imagePullPolicy: IfNotPresent
+              cpu: 500m
+              memory: 1Gi
       restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
+  updateStrategy:
+    type: RollingUpdate
+  revisionHistoryLimit: 10

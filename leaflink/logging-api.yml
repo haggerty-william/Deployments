@@ -1,71 +1,67 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-fetcher
-  namespace: default
+  name: logging-api
+  namespace: leaflink
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-fetcher
+      app: logging-api
   template:
     metadata:
       labels:
-        app: edx-fetcher
+        app: logging-api
     spec:
       containers:
-        - name: edx-fetcher
-          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.23
+        - name: logging-api
+          image: ghcr.io/phoeniqstech/logging-api:v1.0.4
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-fetcher
+              value: logging-api
             - name: PdxAppType
-              value: edx
+              value: logging
             - name: PdxClientGroup
               value: default
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxLogApiAddress
-              value: http://logging-api.default/Log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
             - name: PdxServiceAccountName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '4'
-              memory: 4Gi
+              cpu: '2'
+              memory: 1Gi
             requests:
-              cpu: '1'
-              memory: 4Gi
+              cpu: 200m
+              memory: 256Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred

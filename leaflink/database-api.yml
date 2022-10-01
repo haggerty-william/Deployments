@@ -1,76 +1,63 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: auth-api
-  namespace: default
+  name: database-api
+  namespace: leaflink
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: auth-api
+      app: database-api
   template:
     metadata:
       labels:
-        app: auth-api
+        app: database-api
     spec:
       containers:
-        - name: auth-api
-          image: ghcr.io/phoeniqstech/auth-api:v0.0.10
+        - name: database-api
+          image: ghcr.io/phoeniqstech/database-api:v1.0.6
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Development
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
-            - name: PdxAppName
-              value: auth-api
-            - name: PdxAppType
-              value: auth
-            - name: PdxClientGroup
-              value: default
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
-            - name: PdxDbApiAddress
-              value: http://database-api
-            - name: PdxConfigLogUpdate
-              value: 'true'
             - name: PdxDbServer
               value: mysql.mysql
             - name: PdxDbUser
               value: root
             - name: PdxDbPassword
               value: easlTmysql01
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxClientGroup
+              value: default
+            - name: PdxAppType
+              value: database-api
+            - name: PdxAppName
+              value: database-api
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
             - name: PdxServiceAccountName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '1'
-              memory: 512Mi
+              cpu: '2'
+              memory: 1Gi
             requests:
               cpu: 200m
               memory: 256Mi

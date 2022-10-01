@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: cache-api
-  namespace: default
+  namespace: leaflink
 spec:
   ports:
     - name: http

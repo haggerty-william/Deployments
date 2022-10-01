@@ -1,47 +1,36 @@
-kind: StatefulSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: cache-api
-  namespace: default
+  name: edx-fetcher
+  namespace: leaflink
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: cache-api
+      app: edx-fetcher
   template:
     metadata:
       labels:
-        app: cache-api
+        app: edx-fetcher
     spec:
       containers:
-        - name: cache-api
-          image: ghcr.io/phoeniqstech/sql-cache:v0.0.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-fetcher
+          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.23
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
             - name: PdxAppName
-              value: cache-api
+              value: edx-fetcher
             - name: PdxAppType
-              value: logincache
+              value: edx
             - name: PdxClientGroup
               value: default
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
-            - name: PdxDbServer
-              value: mysql.mysql
-            - name: PdxDbUser
-              value: root
-            - name: PdxDbPassword
-              value: easlTmysql01
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -69,14 +58,14 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '1'
-              memory: 512Mi
+              cpu: '4'
+              memory: 4Gi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: '1'
+              memory: 4Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
+      serviceAccountName: service-discovery-account
+      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate

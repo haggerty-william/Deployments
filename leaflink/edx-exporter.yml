@@ -1,67 +1,71 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: database-api
-  namespace: default
+  name: edx-exporter
+  namespace: leaflink
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
-      app: database-api
+      app: edx-exporter
   template:
     metadata:
       labels:
-        app: database-api
+        app: edx-exporter
     spec:
       containers:
-        - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.0.6
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-exporter
+          image: ghcr.io/phoeniqstech/edx-exporter:v1.0.23
           env:
-            - name: PdxDbServer
-              value: mysql.mysql
-            - name: PdxDbUser
-              value: root
-            - name: PdxDbPassword
-              value: easlTmysql01
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: PdxAppName
+              value: edx-exporter
+            - name: PdxAppType
+              value: edx
             - name: PdxClientGroup
               value: default
-            - name: PdxAppType
-              value: database-api
-            - name: PdxAppName
-              value: database-api
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api:6060/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: status.podIP
             - name: PdxServiceAccountName
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '2'
-              memory: 1Gi
+              cpu: '8'
+              memory: 2Gi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: '1'
+              memory: 2Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
+      serviceAccountName: service-discovery-account
+      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred
