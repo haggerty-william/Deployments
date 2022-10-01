@@ -80,19 +80,3 @@ spec:
         - name: regcred
   updateStrategy:
     type: RollingUpdate
----
-kind: Service
-apiVersion: v1
-metadata:
-  name: cache-api
-  namespace: default
-spec:
-  ports:
-    - name: http
-      protocol: TCP
-      port: 80
-      targetPort: 5000
-  selector:
-    app: cache-api
-  type: LoadBalancer
-  loadBalancerIP: 10.10.1.37

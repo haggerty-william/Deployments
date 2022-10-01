@@ -54,19 +54,3 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.serviceAccountName
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: logging-api
-  namespace: default
-spec:
-  ports:
-    - name: http
-      port: 6060
-      targetPort: 5000
-      protocol: TCP
-  type: ClusterIP
-  selector:
-    app: logging-api

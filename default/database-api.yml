@@ -65,18 +65,3 @@ spec:
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: database-api
-  namespace: default
-spec:
-  ports:
-    - name: http
-      port: 5050
-      targetPort: 5000
-      protocol: TCP
-  type: ClusterIP
-  selector:
-    app: database-api
