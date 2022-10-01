@@ -8,7 +8,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: service-discovery-account
-  namespace: leaflink
 rules:
   - apiGroups: ["apps"]
     resources: ["pods","deployments"]
@@ -18,7 +17,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: service-discovery-account
-  namespace: leaflink
 subjects:
 - kind: ServiceAccount
   name: service-discovery-account
