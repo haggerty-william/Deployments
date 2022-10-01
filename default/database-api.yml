@@ -27,7 +27,7 @@ spec:
             - name: PdxDbPassword
               value: easlTmysql01
             - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
+              value: http://logging-api/Log
             - name: PdxClientGroup
               value: default
             - name: PdxAppType

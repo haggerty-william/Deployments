@@ -31,7 +31,7 @@ spec:
             - name: PdxClientGroup
               value: default
             - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
+              value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxConfigLogUpdate

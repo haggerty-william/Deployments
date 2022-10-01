@@ -35,7 +35,7 @@ spec:
             - name: PdxAuthApiAddress
               value: http://auth-api
             - name: PdxLogApiAddress
-              value: http://logging-api:6060/Log
+              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName

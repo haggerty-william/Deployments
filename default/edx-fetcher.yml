@@ -28,7 +28,7 @@ spec:
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
-              value: http://logging-api.default:6060/Log
+              value: http://logging-api.default/Log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
