@@ -70,4 +70,3 @@ spec:
         - name: regcred
   updateStrategy:
     type: RollingUpdate
-  revisionHistoryLimit: 10
