@@ -65,5 +65,7 @@ spec:
               memory: 4Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
+      serviceAccountName: service-discovery-account
+      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred
