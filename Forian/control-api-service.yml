@@ -53,6 +53,8 @@ spec:
           service:
             name: forian-control-api-service
             port:
-              name: https
+              name: http
     tls:
-  - secretName: easltech-cert
+    - hosts:
+        - qaapi.easltech.com
+      secretName: easltech-cert
