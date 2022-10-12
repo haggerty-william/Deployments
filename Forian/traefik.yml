@@ -24,6 +24,7 @@ spec:
             - --entrypoints.web.address=:80
             - --entrypoints.websecure.address=:443
             - --entrypoints.websecure.http.tls
+            - --providers.file.filename=/config/dyn.yaml
           ports:
             - name: web
               containerPort: 80
@@ -31,3 +32,15 @@ spec:
               containerPort: 8080
             - name: websecure
               containerPort: 443
+          volumeMounts:
+            - name: easltech-cert-volume
+              mountPath: /certs
+            - name: traefik-config-volume
+              mountPath: /config
+      volumes:
+        - name: easltech-cert-volume
+          secret:
+            secretName: easltech-cert
+        - name: traefik-config-volume
+          configMap:
+            name: traefik-config

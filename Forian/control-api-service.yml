@@ -41,7 +41,7 @@ metadata:
   name: forian-control-api-secure-ingress
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.tls: 'true'
 spec:
   rules:
   - host: qaapi.easltech.com
