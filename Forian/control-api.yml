@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: forian-control-api
-          image: ghcr.io/phoeniqstech/forian-control-api:v0.0.4
+          image: ghcr.io/phoeniqstech/forian-control-api:v0.0.12
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -37,56 +37,91 @@ spec:
             - name: AppSettings__LogLevel
               value: Information
             - name: AppSettings__S3Address
-              value: "minio-system-1.minio"
+              value: http://10.10.1.41
             - name: AppSettings__S3AccessKey
-              value: devuser
+              value: PyFVB3Uvunm1vO4F
             - name: AppSettings__S3SecretKey
-              value: phoeniqsDev01
+              value: eQaYiGUWkTHxtd5g44ur53xCTRABbd4C
 
             - name: AppSettings__ApiKeyConfigurations__0__ApiKey
-              value: "67814f7f-c2b5-43ba-8413-9aa776fc4dc1"
+              value: 67814f7f-c2b5-43ba-8413-9aa776fc4dc1
             - name: AppSettings__ApiKeyConfigurations__0__EncryptionKey
-              value: "fQIiBk3JAHMM7ZulxUxeNliX0xrtggx0ImPNlvpFTSk="
+              value: fQIiBk3JAHMM7ZulxUxeNliX0xrtggx0ImPNlvpFTSk=
             - name: AppSettings__ApiKeyConfigurations__0__BucketName
-              value: "test-one"
+              value: test-one
 
             - name: AppSettings__ApiKeyConfigurations__1__ApiKey
-              value: "6d44a28a-d145-41d4-a9f7-8fad66b5642b"
+              value: 6d44a28a-d145-41d4-a9f7-8fad66b5642b
             - name: AppSettings__ApiKeyConfigurations__1__EncryptionKey
-              value: "RgRRhIkAhxTBfu0cEZ6vDoTFDwbrSqwiWKUiSihdR9g="
+              value: RgRRhIkAhxTBfu0cEZ6vDoTFDwbrSqwiWKUiSihdR9g=
             - name: AppSettings__ApiKeyConfigurations__1__BucketName
-              value: "test-two"
+              value: test-two
 
             - name: MinioSettings__Endpoint
-              value: "minio-system-1.minio"
+              value: http://10.10.1.41
             - name: MinioSettings__AccessKey
-              value: "devuser"
+              value: PyFVB3Uvunm1vO4F
             - name: MinioSettings__SecretKey
-              value: "phoeniqsDev01"
+              value: eQaYiGUWkTHxtd5g44ur53xCTRABbd4C
             - name: MinioSettings__UsesSSL
-              value: "false"
+              value: 'false'
             - name: MinioSettings__Bucket
-              value: "forian"
+              value: forian
 
             - name: DataModel__AgentConfigurations__hoover-test__AgentWatcherConfiguration__SleepTime
-              value: "00:15:00"
+              value: 00:15:00
             - name: DataModel__AgentConfigurations__hoover-test__DatabaseConnectionString
-              value: "Server=localhost:5432;Database=easltech;User Id=easltech;Password=FC3tgppqqb3h4cJ4vzwKrWtk;"
-            - name: DataModel__AgentConfigurations__hoover-test__DatabaseSqlScript
-              value: "SELECT * FROM public.orders ORDER BY order_id ASC"
+              value: 'Server=localhost:5432;Database=biotrackthc;User Id=easltech;Password=FC3tgppqqb3h4cJ4vzwKrWtk;'
             - name: DataModel__AgentConfigurations__hoover-test__DesiredProgramVersion
-              value: "0.0.3"
-            - name: DataModel__AgentConfigurations__hoover-test__CurrentProgramVersion
-              value: "0.0.3"
+              value: '0.0.8'
             - name: DataModel__AgentConfigurations__hoover-test__DesiredSleepTime
-              value: "01:00:00"
+              value: 01:00:00
             - name: DataModel__AgentConfigurations__hoover-test__LastProgramStart
-              value: "2022-09-06T16:18:30.7912209Z"
+              value: '2022-09-06T16:18:30.7912209Z'
             - name: DataModel__AgentConfigurations__hoover-test__RebootControlFlag
-              value: "false"
-            - name: DataModel__AgentConfigurations__hoover-test__ApiKey
-              value: "67814f7f-c2b5-43ba-8413-9aa776fc4dc1"
+              value: 'false'
+            - name: DataModel__AgentConfigurations__hoover-test__DataLandingAddress
+              value: https://qaapi.easltech.com
+            - name: DataModel__AgentConfigurations__hoover-test__CronExpression
+              value: '0 0/2 * * * ?'
+            - name: DataModel__AgentConfigurations__hoover-test__UploadSettings__BucketName
+              value: test-1
+            - name: DataModel__AgentConfigurations__hoover-test__UploadSettings__EncryptionKey
+              value: fQIiBk3JAHMM7ZulxUxeNliX0xrtggx0ImPNlvpFTSk=
 
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__0__SqlScriptName
+              value: inventory
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__0__SqlScript
+              value: 'SELECT * FROM inventory limit 100'
+
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__1__SqlScriptName
+              value: customers
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__1__SqlScript
+              value: 'SELECT * FROM customers limit 100'
+
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__2__SqlScriptName
+              value: sales
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__2__SqlScript
+              value: 'SELECT * FROM sales limit 100'
+            
+
+
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__3__SqlScriptName
+              value: products
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__3__SqlScript
+              value: 'SELECT * FROM products limit 100'
+            
+
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__4__SqlScriptName
+              value: productcategories
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__4__SqlScript
+              value: 'SELECT * FROM productcategories limit 100'
+            
+
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__5__SqlScriptName
+              value: productcategories
+            - name: DataModel__AgentConfigurations__hoover-test__SqlCommands__5__SqlScript
+              value: 'SELECT * FROM payments limit 100'
 
             - name: PdxDbServer
               value: mysql.mysql
@@ -121,11 +156,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '1'
-              memory: 512Mi
+              cpu: '2'
+              memory: 2048Mi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: '1'
+              memory: 1024Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
