@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/phoeniqstech/edx-exporter:v1.0.23
+          image: ghcr.io/phoeniqstech/edx-exporter:v1.0.26
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
