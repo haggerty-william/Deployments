@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.0.26
+          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.0.27
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development

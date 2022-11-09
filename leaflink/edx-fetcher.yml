@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.26
+          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.27
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '4'
-              memory: 6Gi
+              memory: 4Gi
             requests:
               cpu: '1'
-              memory: 6Gi
+              memory: 4Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       serviceAccountName: service-discovery-account
