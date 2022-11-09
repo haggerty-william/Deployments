@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: database-api
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.0.7
+          image: ghcr.io/phoeniqstech/database-api:v1.0.8
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -31,9 +31,21 @@ spec:
             - name: PdxClientGroup
               value: default
             - name: PdxAppType
-              value: database-api
+              value: api
             - name: PdxAppName
               value: database-api
+            - name: AppSettings__MaxAttemptsInLastHour
+              value: "3"
+            - name: AppSettings__Issuer
+              value: "10.10.1.59"
+            - name: AppSettings__Secret
+              value: ZufvMKezd77HauKI4ge9e7VK4O8KyJyZOtdhrgn4mJGdHhSiPFWlD6M6vds8idiURdpDCiG3yqZiah68xQbYCR74DEwtiIpkMAnjerpQXklA0nnvlSv2G59BVqkip8hM
+            - name: AppSettings__LogLevel
+              value: Information
+            - name: AppSettings__TokenLifeTime
+              value: "01:00:00"
+            - name: AppSettings__RefreshTokenLifeTime
+              value: "06:00:00"
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
