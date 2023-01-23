@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '8'
-              memory: 2Gi
+              memory: 3Gi
             requests:
               cpu: '1'
-              memory: 2Gi
+              memory: 3Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       serviceAccountName: service-discovery-account
