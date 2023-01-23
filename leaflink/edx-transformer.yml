@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/phoeniqstech/edx-transformer:v1.0.27
+          image: ghcr.io/phoeniqstech/edx-transformer:v1.0.29
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
