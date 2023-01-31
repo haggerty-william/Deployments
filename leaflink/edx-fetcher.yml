@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/phoeniqstech/edx-fetcher:v1.0.29.1
+          image: ghcr.io/phoeniqstech/edx-fetcher:v1.1.0
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
