@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/phoeniqstech/edx-exporter:v1.1.0.1
+          image: ghcr.io/phoeniqstech/edx-exporter:v1.1.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Development
@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '8'
-              memory: 6Gi
+              memory: 8Gi
             requests:
               cpu: '1'
-              memory: 6Gi
+              memory: 8Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       serviceAccountName: service-discovery-account
