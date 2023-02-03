@@ -1,0 +1,177 @@
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-role
+  namespace: qa-leaflink
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+---
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: traefik-account
+  namespace: qa-leaflink
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: traefik-role-binding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: traefik-role
+subjects:
+  - kind: ServiceAccount
+    name: traefik-account
+    namespace: qa-leaflink
+---
+apiVersion: v1
+data:
+  tls.crt: c3ViamVjdD1DTiA9ICouZWFzbHRlY2guY29tCgppc3N1ZXI9QyA9IFBBLCBPID0gVHJ1c3RDb3IgU3lzdGVtcyBTLiBkZSBSLkwuLCBDTiA9IFRydXN0Q29yIERWIFNTTCBDQSAtIEcyIC0gUlNBCgotLS0tLUJFR0lOIENFUlRJRklDQVRFLS0tLS0KTUlJSEV6Q0NCZnVnQXdJQkFnSU5BS3p6NEd0U1ZkR3REMDBzbWpBTkJna3Foa2lHOXcwQkFRc0ZBREJiTVFzdwpDUVlEVlFRR0V3SlFRVEVrTUNJR0ExVUVDZ3diVkhKMWMzUkRiM0lnVTNsemRHVnRjeUJUTGlCa1pTQlNMa3d1Ck1TWXdKQVlEVlFRRERCMVVjblZ6ZEVOdmNpQkVWaUJUVTB3Z1EwRWdMU0JITWlBdElGSlRRVEFlRncweU1qRXcKTVRBeE56STBNVGRhRncweU16RXdNVEF4TnpJME1UWmFNQmt4RnpBVkJnTlZCQU1NRGlvdVpXRnpiSFJsWTJndQpZMjl0TUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF6R2tSZi9WTmYwYnA4YVYxCmhBUm9QTVU0aUFUVjRIRU9INXVFMWpLdHREZkFWYVNnTys4emdHV3puVG92SE03eEFjelBWWk5kOG03cFB1T28KYkJCajQvRUR6ZzVFTDZtSFFNbXdmV0RYMmJKTDNSNjgxUVJIVlZ2VnM2Y0s5TWRKWVU3Uy8zZUNPQTVkdkR6QwoySWtYckg2OTN6OTkzaGZYYVVIeWwrYVRqSTZRUlhaSmRLQjZuaWlHSVFKMGJHWWZGaFJwVEh5aEhvSkpYUldXCmZ4QWh2NmRzREVVUDJGekwrcThpcmFSaDQ0d3dmS1RNM2NVcWVTZVB1KzA1ZG16MGNaSjNuWE9nZ0liYk43dzUKUEN4RGx0UkdHRi9IdURnbGIwdXNGUnJBYmluRVZtY0t4amhjZXpYNVhka0x1amwrNG9vWWdneXhUaWtsRFpaWQpSMUVadXdJREFRQUJvNElFRmpDQ0JCSXdiQVlJS3dZQkJRVUhBUUVFWURCZU1DTUdDQ3NHQVFVRkJ6QUJoaGRvCmRIUndPaTh2YjJOemNDNTBjblZ6ZEdOdmNpNWpZVEEzQmdnckJnRUZCUWN3QW9ZcmFIUjBjRG92TDJObGNuUnoKTG5SeWRYTjBZMjl5TG1OaEwzTjFZaTlrZGkxemMyd3Rjbk5oTG1SbGNqQWZCZ05WSFNNRUdEQVdnQlFTN0I2Ywp0UC9ESkJlTG52QzhjTlVlTDJCMFZ6QUpCZ05WSFJNRUFqQUFNRUFHQTFVZEh3UTVNRGN3TmFBem9ER0dMMmgwCmRIQTZMeTlqY213dWRISjFjM1JqYjNJdVkyRXZjM1ZpTDJSMkxYTnpiQzF5YzJFdGN5MHhOVFF1WTNKc01CMEcKQTFVZEpRUVdNQlFHQ0NzR0FRVUZCd01CQmdnckJnRUZCUWNEQWpBZEJnTlZIUTRFRmdRVTZ2eGk2ZFhXVFlqKwptL2hFS0hRaHJsQk4rMDh3RGdZRFZSMFBBUUgvQkFRREFnV2dNQmtHQTFVZEVRUVNNQkNDRGlvdVpXRnpiSFJsClkyZ3VZMjl0TUZjR0ExVWRJQVJRTUU0d1FnWUxLd1lCQkFHQzEzOEJBUkV3TXpBeEJnZ3JCZ0VGQlFjQ0FSWWwKYUhSMGNEb3ZMM1J5ZFhOMFkyOXlMbU52YlM5eVpYTnZkWEpqWlhNdlkzQnpMbkJrWmpBSUJnWm5nUXdCQWdFdwpnZ0p3QmdvckJnRUVBZFo1QWdRQ0JJSUNZQVNDQWx3Q1dnQjNBT2crME5vKzlRWTFNdWRYS0x5SmE4a0QwOHZSCkVXdnM2Mm5oZDMxdEJyMXVBQUFCZzhMd3RXd0FBQVFEQUVnd1JnSWhBTnJwRUxFa3hVZ3E0YmlIMDEwMk5vS2gKOGV6ZTZUSlI3K0Z4VXVac2dtTjFBaUVBOEVUZFBvd1NXNmdWN083QW0venFYNGVnMmFkK3l3WHdLNVlWd3gxeAp0ajRBZGdDdDk3NzZmUDhReUl1ZFBad2VQaGhxdEdjcFhjK3hEQ1RLaFlZMDY5eUNpZ0FBQVlQQzhMZW9BQUFFCkF3QkhNRVVDSUgxWmtFQnNYeVpwcU9KdTdSV1hobkp4cDZORWdLSnh6dFFXRHArVC83VURBaUVBNzBUWkJ5OG8Kc0tzclVRNllnRFdlOUNaU0Y0dnZESUM0Z09iMHhTU3BFSlVBZGdCNk1veFUyTGN0dGlEcU9PQlNIdW1FRm5BeQpFNFZOTzlJcndUcFhvMUxyVWdBQUFZUEM4THBGQUFBRUF3QkhNRVVDSVFERWZmT1pwWjFzaEJySjhKc09EUWh3CjJtUHNOeXB0djhURDFLSUNENmtwdXdJZ0NHN0xWUHdFYVdBTVFQeFBwUVlZWlpwQkVlSkRqREJIbFQzTnl5R3EKcXJZQWRnQ3pjM2NINFlSUStHT0cxZ1dwM0JFSlNua3RzV2NNQzRmYzhBTU9lVGFsbWdBQUFZUEM4THRDQUFBRQpBd0JITUVVQ0lIZU1xTXVOUmV0dEhrK2FGZVFpWW1MSHNoNE5sQjlFLzdMY3hQSlJlNFMyQWlFQXB1NmY0cldsClo0bUd6RkhWak9NVnNtbGFWTVZUcWN3NEwyckpqMEVMSnR3QWR3QlZnZFRDRnBBMkFVcnFDNXRYUEZQd3dPUTQKZUhBbENCY3ZvNm9kQnhQVERBQUFBWVBDOEwwU0FBQUVBd0JJTUVZQ0lRQ0h1dHdIUlJ2Z2wwWGNnVjhDZFFMOAoxb0NuSHV3ckF6d3MvYm83dFJzYk9RSWhBSUtpQXliSkYxc3pOT2szYmRZU2EzS2krblhFZ3l2cXJKOG1lelRVCjBHUzlNQTBHQ1NxR1NJYjNEUUVCQ3dVQUE0SUJBUUF3elI3S29NUjRHRGJUNWtqQytTMGVKRENnblhUNTQwRC8KbXU5aFQ1R0R6QnZOSkhjbEFZVFZ5TDAzaEFOSmFha2FhZW9VOGtsNjRhcVBuN0QydVdsVWN2OS82MDVpR3A0UApzZm5iRnNFalVWY1JiVmlHTEFuQmpsS2RhWHk2TkNsK0p5TDBpWkdNdlZrMmxMT2RrK3NTdW45VTJiOSsybWNjCjcvTEFhczA1bXR3T08xR2Q2bjFGYVhubG5DNVYreWxwSm5xNG0ydDBCQ3JDYldibGU5WWlpUjN6d2pVNnJnNUsKVExGRmZLN1QyVmZnY1Yxam16YTZGZzBPdExTbWN0S3VUbDBxdUZudjN0YVRoVFFYK3hrYWx1R1JsSGJ0VzR5bgpmYmV0RUVrcDErRWplSVh2WHA0SGx2RzE2bkNsYlR0Q08yZ0pWRVhLQ2tyUS9HS1RWMThRCi0tLS0tRU5EIENFUlRJRklDQVRFLS0tLS0=
+  tls.key: LS0tLS1CRUdJTiBQUklWQVRFIEtFWS0tLS0tCk1JSUV2UUlCQURBTkJna3Foa2lHOXcwQkFRRUZBQVNDQktjd2dnU2pBZ0VBQW9JQkFRRE1hUkYvOVUxL1J1bngKcFhXRUJHZzh4VGlJQk5YZ2NRNGZtNFRXTXEyME44QlZwS0E3N3pPQVpiT2RPaThjenZFQnpNOVZrMTN5YnVrKwo0NmhzRUdQajhRUE9Ea1F2cVlkQXliQjlZTmZac2t2ZEhyelZCRWRWVzlXenB3cjB4MGxoVHRML2Q0STREbDI4ClBNTFlpUmVzZnIzZlAzM2VGOWRwUWZLWDVwT01qcEJGZGtsMG9IcWVLSVloQW5Sc1poOFdGR2xNZktFZWdrbGQKRlpaL0VDRy9wMndNUlEvWVhNdjZyeUt0cEdIampEQjhwTXpkeFNwNUo0Kzc3VGwyYlBSeGtuZWRjNkNBaHRzMwp2RGs4TEVPVzFFWVlYOGU0T0NWdlM2d1ZHc0J1S2NSV1p3ckdPRng3TmZsZDJRdTZPWDdpaWhpQ0RMRk9LU1VOCmxsaEhVUm03QWdNQkFBRUNnZ0VBVzV1Kzd3VEZyWVBmZHArN2tlWFR2V0I1M0dPbVlvYm9XSHYvUld2QzgyQ0UKL3h6ZmZ0ek56UDVIUi9CNmlzT251VEhMdmNOa3VERENzWitmcklhUDdlam0xcU1JSmdBcEVIMFRicTFITDFZNwpyNmFGNUVXZG5vQ2d2bm5mYkNJZ0hjOFF1dE1aZGZ2aVFHbE92WEo3UEtBMGdlZlhoZ0JUVnVYcVRlOVZNd2tvClRlb3FyRFJuZmlJNUoxMkNsVVhGcHkzTVM2SnVyd3hYcDVmM1BNemxVVjFwK2VKSzhiTTVORGJCZG9nVGllSnUKS09WL1VDcC9LQS9nalc4ZzZrNGh4NzNJdzd6cXBnK2FvMDZFLy9iODkvUGtWdFNZWUhnYW5aQjZ1RFlabDF5YgpLbitZd2FINFJlczVNVlJ5SjRSWUpCdnFjY1hQS1REclBNVlFhZUI0UVFLQmdRRG1CWWs2UW5xT0owcVpPcEhrCmp6UlBZM3J6Q05id05IZGM3OE9rMmhWSHVESTlJeFNiWlloQ0U3c3E3Rzk0VFlpYTk2VGEzNmlDYkx1Vzd2cXEKNUYySDlPS2dVZXZ5RTduRVUxSXVOWTlsR2E2clRyMlpVaklrdDFtOTZIQjIwVDkvN0lhNjU3d3d4RFZWZTZXUgpNZ1R6S0ZtTXZhcWhTS1BsWmdRYnNxQWo0UUtCZ1FEamZ3MXZPZmMrTlM5YmN5VjB1VndUaEpWVnl3Y2JvVFg3CnkwWW5ETWROd2t4SXovOVptQ2prekdER0FEWGxrWGJuK0lhVXJDZ0N2QVk3Z0lUYWNMUVIzZmlKay9JcnllREIKYWhkay8yblVEQ2xiMVhQK01IZTRoSFZVM3JwQjAxRzBnRi9lbm5uK0dJb3lSZnhsd3crRG9FanlOL2szcVl3Mwp3SFdsYzNkeEd3S0JnRm1Vb0Z2YkZnV1VrYjNaRElaWnF3S2IrSDc3MjFGUzdZVjVMdFZkeFZuWUIyQzk3OEdSCktoNnB0b1BCN3F1SWJvSURuZVZMbzBHZi9QS01BWDFhVUg2cFJUVXdrbFlGanB4QjRzaHlQWFVmS21JMjJTb0QKMDlsdXVubDJNNDVpY1h0dGJ3OE5Qc0l6TjU0aCtGbnlnL0Q2cnQxYjVEN0pubUt4ZHpvZU43V2hBb0dCQU1MVApJdkUzSmhyN056Uk5GeTJ3TkQ5dTB1a25OMDRkTUhzVGFWKzEzTlVsNldpTjRIT2RFS0JvdXhPMlNISHlzbThVCmNrVE9ibkZ4RHJGVWJmSVloTTJzVjlXU2d0bW5TTGk3SDQvYUFJcWRZNm9HMGhCRTk3Sm9sWWI2TzI1MkI4bmEKQ3NBKzNlQ1NxWDlHV2xIWHkraUFreGdFZ1lSK3lkdFJFaStBQkRFekFvR0FDVDZUa3RrVUtyVmhWazB2d2xibwpDUEtsaGZ4WUI0TXlQL3UzMDNBRlRZdGdHU1dxN09HcHZNcHZDblR6UXZKdzN0MXVyakxYRFFCSFh5RDkrUUszCnRXcG1hMzdsaTlkemRRTUN5OWZCUE1ndTIybVNmWndXR0hPcm9ob2x2L2tjZ2dwdjJyeW10d0lLUnFaMEl0NGMKaHB4MVI5bFVOT0k0VlY5clpINU4zUDA9Ci0tLS0tRU5EIFBSSVZBVEUgS0VZLS0tLS0=
+kind: Secret
+metadata:
+  name: easltech-cert
+  namespace: qa-leaflink
+type: Opaque
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: traefik-config
+  labels:
+    name: traefik-config
+  namespace: qa-leaflink
+data:
+  dyn.yaml: |
+    # https://doc.traefik.io/traefik/https/tls/
+    tls:
+      stores:
+        default:
+          defaultCertificate:
+            certFile: '/certs/tls.crt'
+            keyFile: '/certs/tls.key'
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: traefik-deployment
+  namespace: qa-leaflink
+  labels:
+    app: traefik
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik-account
+      containers:
+        - name: traefik
+          image: traefik:v2.9
+          args:
+            - --api.insecure
+            - --providers.kubernetesingress
+            - --entrypoints.web.address=:80
+            - --entrypoints.websecure.address=:443
+            - --entrypoints.websecure.http.tls
+            - --providers.file.filename=/config/dyn.yaml
+          ports:
+            - name: web
+              containerPort: 80
+            - name: dashboard
+              containerPort: 8080
+            - name: websecure
+              containerPort: 443
+          volumeMounts:
+            - name: easltech-cert-volume
+              mountPath: /certs
+            - name: traefik-config-volume
+              mountPath: /config
+      volumes:
+        - name: easltech-cert-volume
+          secret:
+            secretName: easltech-cert
+        - name: traefik-config-volume
+          configMap:
+            name: traefik-config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-dashboard-service
+  namespace: qa-leaflink
+spec:
+  type: NodePort
+  ports:
+    - port: 30001
+      targetPort: dashboard
+  selector:
+    app: traefik
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-web-service
+  namespace: qa-leaflink
+spec:
+  type: NodePort
+  ports:
+    - targetPort: web
+      port: 30002
+      name: http
+    - targetPort: websecure
+      port: 30003
+      name: https
+  selector:
+    app: traefik
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mgmt-ingress
+  namespace: qa-leaflink
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+spec:
+  rules:
+  - host: qa.mgmt.easltech.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: edx-mgmtui
+            port:
+              name: http
