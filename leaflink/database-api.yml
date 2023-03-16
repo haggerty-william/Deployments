@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.1.4
+          image: ghcr.io/phoeniqstech/database-api:v1.1.5
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -54,7 +54,7 @@ spec:
             - name: EmailSettings__EmailHost
               value: smtp.gmail.com
             - name: EmailSettings__EmailSendingPassword
-              value: piwbdvjapcrjhgwr
+              value: sxposmjyhkyfqqyb
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName

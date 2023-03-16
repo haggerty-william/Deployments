@@ -15,10 +15,12 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.1.5
+          image: ghcr.io/phoeniqstech/edx-jobdispatcher:v1.1.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Development
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
               value: edx-jobdispatcher
             - name: PdxAppType

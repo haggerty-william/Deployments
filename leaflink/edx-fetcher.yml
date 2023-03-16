@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/phoeniqstech/edx-fetcher:v1.1.5
+          image: ghcr.io/phoeniqstech/edx-fetcher:v1.1.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Development
+              value: Production
             - name: PdxAppName
               value: edx-fetcher
             - name: PdxAppType

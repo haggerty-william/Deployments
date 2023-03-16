@@ -15,10 +15,10 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/phoeniqstech/edx-exporter:v1.1.5.1
+          image: ghcr.io/phoeniqstech/edx-exporter:v1.1.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Development
+              value: Production
             - name: PdxAppName
               value: edx-exporter
             - name: PdxAppType
