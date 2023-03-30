@@ -37,7 +37,7 @@ spec:
             - name: AppSettings__MaxAttemptsInLastHour
               value: "3"
             - name: AppSettings__Issuer
-              value: "10.10.1.59"
+              value: "llmgmtui"
             - name: AppSettings__Secret
               value: ZufvMKezd77HauKI4ge9e7VK4O8KyJyZOtdhrgn4mJGdHhSiPFWlD6M6vds8idiURdpDCiG3yqZiah68xQbYCR74DEwtiIpkMAnjerpQXklA0nnvlSv2G59BVqkip8hM
             - name: AppSettings__LogLevel
@@ -76,11 +76,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '8'
-              memory: 8Gi
+              cpu: '2'
+              memory: 1Gi
             requests:
-              cpu: '4'
-              memory: 4Gi
+              cpu: '1'
+              memory: 256Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
