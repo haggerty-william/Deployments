@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.1.5
+          image: ghcr.io/phoeniqstech/database-api:v1.1.6
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -48,7 +48,7 @@ spec:
               value: "06:00:00"
             - name: PdxNodeName
             - name: EmailSettings__WebHostAddress
-              value: http://10.10.1.59
+              value: http://10.7.0.59
             - name: EmailSettings__EmailSendingAddress
               value: devops@easltech.com
             - name: EmailSettings__EmailHost
@@ -76,11 +76,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '2'
-              memory: 1Gi
+              cpu: '8'
+              memory: 8Gi
             requests:
-              cpu: 200m
-              memory: 256Mi
+              cpu: '4'
+              memory: 4Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
