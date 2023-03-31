@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: jwtkey
+  namespace: leaflink
+spec:
+  encryptedData:
+    jwtkey: AgByrflYQDm7Zi2SEUpmPAr+EIT3zDxsMzE/UbHwZSeDW9UWu/xUhnn5N0YwcxIN3II3NSqKQynO5rdc4zN/cfszSsnPLlUg77LgBcszr+b7ADUwPezerDqd9NGiviY110pEHKGYu6UttW1R/3HgwE30qLsoYSIcVXkxfBVrCnLDant73Emw+rUKVL2F9XbxjXgBjQuufRQPHjiqgpy/sOVbrAV1gQd/E2E3a0dAXdWsUM9d3u6s/fZ0YnIQEf0xo8rkCdCivFeCx5TMzwxFiDg0uP22/GOWCFi/DBnIqidImXTxQKSxVtbRNy8pffc/leNE+vczysFV59ZKmRFBW5Tn8zjjx6Li5Vu+ycVR9B9aFoN6Mbr5PZzfzLMwjAWChE9Ojri5YTl68GJf6wKXcyC8zCpxe8lxj+0uBvkl21yx+RvhXXJnUEtLd72AW+YIHOJjbWnu8ZORLYhojuunk1HR6Qc9ik6S3r104jp9ibrJdsI04DHZeEOJ2z+v5a5Xwzrq+d7h9LDmZ1MGI46Z+0a/QgpWBirFEeFLVw5esC9gaxu334ETRUmIyGVPc9fzXZAKm5v/M1tC6EZY/m71hjiDGcFLsKOf0YIshp95MaGvXTeAnf/DyggT9vkMWC8pvCQaOYSpLY3S+6WWLc6PwmQ3PCU/DjUfOE5tJPVVvcq/UcEBOFvIyGsLN9Dvx8z2G/XSQ4y4IOITyvERj0cnI8XFYreZ/ffos9Tk0F4GGexUdqa2dxhkb+PDuInpUYKXr/y7jIxj7EHkESUEFSv2pcW+O8EaktTkbtf2LjO/6RwZ/a9C/cPbWnit94ZQvI2kBpwNqgjwSp2I5/EZcDifUuAp3vN6D4InU9smCwhhYVj02Q==
+  template:
+    metadata:
+      name: jwtkey
+      namespace: leaflink
