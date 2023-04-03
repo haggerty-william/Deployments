@@ -23,9 +23,15 @@ spec:
             - name: PdxDbServer
               value: mysql.mysql
             - name: PdxDbUser
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
             - name: PdxDbPassword
-              value: easlTmysql01
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
