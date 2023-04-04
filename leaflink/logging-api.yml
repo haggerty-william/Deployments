@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: logging-api
-          image: ghcr.io/phoeniqstech/logging-api:v1.0.8
+          image: ghcr.io/phoeniqstech/logging-api:v1.0.14
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -33,7 +33,7 @@ spec:
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
