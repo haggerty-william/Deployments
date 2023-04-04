@@ -23,9 +23,15 @@ spec:
             - name: PdxDbServer
               value: mysql.mysql
             - name: PdxDbUser
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
             - name: PdxDbPassword
-              value: easlTmysql01
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
@@ -39,7 +45,10 @@ spec:
             - name: AppSettings__Issuer
               value: "llmgmtui"
             - name: AppSettings__Secret
-              value: ZufvMKezd77HauKI4ge9e7VK4O8KyJyZOtdhrgn4mJGdHhSiPFWlD6M6vds8idiURdpDCiG3yqZiah68xQbYCR74DEwtiIpkMAnjerpQXklA0nnvlSv2G59BVqkip8hM
+              valueFrom:
+                secretKeyRef:
+                  name: jwtkey
+                  key: jwtkey
             - name: AppSettings__LogLevel
               value: Information
             - name: AppSettings__TokenLifeTime
@@ -54,7 +63,10 @@ spec:
             - name: EmailSettings__EmailHost
               value: smtp.gmail.com
             - name: EmailSettings__EmailSendingPassword
-              value: sxposmjyhkyfqqyb
+              valueFrom:
+                secretKeyRef:
+                  name: emailsender
+                  key: password
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName

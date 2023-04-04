@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: emailsender
+  namespace: leaflink
+spec:
+  encryptedData:
+    password: AgA0Tp0MjXyd8DyIKtd0AC666gnjzrDzYD06Yp0JqS4KIFtKNw981s2ENPQHZ/Jjhh8w8bD4SRsDgvb3Sif6trndnnuvPSD3pqQOM+hizE/8AgrwkMwOEFPyPtIwBvAfFN5+L1bEC8PdDAMNBDsp2qfZBR/1lxGaCn3WejtPpgXaBv8TZRDpkqJAZaKXjKyyItSCvNedrLxUz7mSLLu3CMzrNZ9CG9A4x8e+0fWHIm82ffAD8YI0dax74OinI+2kf75mDwoGutH619MJV6nc7V/m9PuRtKafE0jjCKe9OQZgEigZi9pZFVaEFp2P4MwPN7tPbN1gtM4wRKrRa5o2fybXutP4m59ep1hkXmqW1k16HzoMefBU1akijNSEmoSIwzC1Jb98kLhiF4zd9yePcMeMDTw+aibGbwgjiPKvfQf7GV5OMGbwX+3ye3hTGvFDqsU6ICYtyAOc64N2dVybd5lLR7bjQgDJV+kz6TXQou3/ysQII2IMvUvttMZLutzNhh1PR8YFbuv2S8C0sLFqunFDLftvFmucsCj5ikB6BzONwOqsA6Hga2atSPKvujm7cnWd26ytkgek6zNwFzoDN7Is6wQJfRqnlHeNlkAx88FStmUGvelmZYIDrXO0+8XtN4ivkrhDYU7wtb2iQYo68McGm3b7ZPfMUvtAtSqREdkdq0LE5vjlleRY7Nx9HJO4A8LFkrQWLTNX5DdXfGPKY/My
+  template:
+    metadata:
+      name: emailsender
+      namespace: leaflink
