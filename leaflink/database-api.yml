@@ -15,19 +15,31 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/phoeniqstech/database-api:v1.1.6
+          image: ghcr.io/phoeniqstech/database-api:v1.1.7
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
             - name: PdxDbServer
-              value: mysql.mysql
+              value: mysql-internal.mysql
             - name: PdxDbUser
               valueFrom:
                 secretKeyRef:
                   name: dblogin
                   key: user
             - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
+            - name: SolrDbServer
+              value: mysql.mysql
+            - name: SolrDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: SolrDbPassword
               valueFrom:
                 secretKeyRef:
                   name: dblogin
@@ -57,7 +69,7 @@ spec:
               value: "06:00:00"
             - name: PdxNodeName
             - name: EmailSettings__WebHostAddress
-              value: http://10.7.0.59
+              value: https://prodedxmgmt.easltech.com
             - name: EmailSettings__EmailSendingAddress
               value: devops@easltech.com
             - name: EmailSettings__EmailHost
@@ -67,8 +79,10 @@ spec:
                 secretKeyRef:
                   name: emailsender
                   key: password
+            - name: PdxNodeName
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
