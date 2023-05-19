@@ -67,6 +67,10 @@ spec:
               value: "01:00:00"
             - name: AppSettings__RefreshTokenLifeTime
               value: "06:00:00"
+            - name: AppSettings__DataExportDeleteRecordAgeDays
+              value: "30"
+            - name: AppSettings__TransfromDeleteRecordAgeDays
+              value: "30"
             - name: PdxNodeName
             - name: EmailSettings__WebHostAddress
               value: https://prodedxmgmt.easltech.com
