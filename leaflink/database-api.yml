@@ -33,7 +33,7 @@ spec:
                   name: dblogin
                   key: password
             - name: SolrDbServer
-              value: mysql.mysql
+              value: ll-solorbackup-mysql
             - name: SolrDbUser
               valueFrom:
                 secretKeyRef:
