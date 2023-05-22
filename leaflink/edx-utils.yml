@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edx-utils
+  namespace: leaflink
+spec:
+  selector:
+    matchLabels:
+      app: edx-utils
+  template:
+    metadata:
+      labels:
+        app: edx-utils
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-utils
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          image: ghcr.io/easltech/edx-utils:latest
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Release"
+          - name: PdxAppName
+            value: "edx-utils"
+          - name: PdxAppType
+            value: "edx"
+          - name: PdxClientGroup
+            value: "default"
+          - name: PdxDbApiAddress
+            value: "http://database-api:5050"
+          - name: PdxLogApiAddress
+            value: "http://logging-api:6060/Log"
+          - name: PdxConfigLogUpdate
+            value: "false"
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName
