@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.1.8
+          image: ghcr.io/easltech/database-api:v1.1.9
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -112,6 +112,15 @@ spec:
               cpu: '1'
               memory: 256Mi
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 300
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred

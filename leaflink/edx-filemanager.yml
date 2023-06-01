@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v1.1.10
+          image: ghcr.io/easltech/edx-filemanager:v1.1.11
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -64,6 +64,15 @@ spec:
             requests:
               cpu: 500m
               memory: 1Gi
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 300
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
       terminationGracePeriodSeconds: 30
       imagePullSecrets:

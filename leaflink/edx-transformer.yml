@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.10
+          image: ghcr.io/easltech/edx-transformer:v1.1.11
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -64,6 +64,15 @@ spec:
               cpu: '1'
               memory: 4Gi
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 300
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
       serviceAccountName: service-discovery-account
       serviceAccount: service-discovery-account
