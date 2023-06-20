@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.11
+          image: ghcr.io/easltech/edx-transformer:v1.1.13
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -70,7 +70,7 @@ spec:
               port: 5000
               scheme: HTTP
             timeoutSeconds: 5
-            periodSeconds: 300
+            periodSeconds: 900
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always

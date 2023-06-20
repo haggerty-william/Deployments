@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: logging-api
-          image: ghcr.io/phoeniqstech/logging-api:v1.0.14
+          image: ghcr.io/easltech/logging-api:v1.0.15.2
           ports:
             - containerPort: 5000
               protocol: TCP

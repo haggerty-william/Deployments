@@ -6,7 +6,7 @@ metadata:
 spec:
   containers:
     - name: edx-emailsender
-      image: ghcr.io/easltech/edx-emailsender:v1.1.11
+      image: ghcr.io/easltech/edx-emailsender:v1.1.13
       env:
         - name: ASPNETCORE_ENVIRONMENT
           value: Release
@@ -47,6 +47,15 @@ spec:
             fieldRef:
               apiVersion: v1
               fieldPath: spec.serviceAccountName
+      livenessProbe:
+        httpGet:
+          path: /_health
+          port: 5000
+          scheme: HTTP
+        timeoutSeconds: 5
+        periodSeconds: 900
+        successThreshold: 1
+        failureThreshold: 3
       resources:
         limits:
           cpu: '1'
@@ -54,5 +63,6 @@ spec:
         requests:
           cpu: 200m
           memory: 256Mi
+          
   imagePullSecrets:
     - name: regcred

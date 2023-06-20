@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.1.9
+          image: ghcr.io/easltech/database-api:v1.1.10
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -118,7 +118,7 @@ spec:
               port: 5000
               scheme: HTTP
             timeoutSeconds: 5
-            periodSeconds: 300
+            periodSeconds: 900
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
