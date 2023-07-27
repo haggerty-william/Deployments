@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.1.11.1
+          image: ghcr.io/easltech/database-api:v1.1.12
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -71,6 +71,14 @@ spec:
               value: "30"
             - name: AppSettings__TransfromDeleteRecordAgeDays
               value: "30"
+            - name: AppSettings__RabbitMqHost
+              value: "prod1k8rmq.rabbitmq-system"
+            - name: AppSettings__RabbitMqPort
+              value: "5672"
+            - name: AppSettings__RabbitMqUsername
+              value: "admin"
+            - name: AppSettings__RabbitMqPassword
+              value: "prod1k8rmq"
             - name: PdxNodeName
             - name: EmailSettings__WebHostAddress
               value: https://prodedxmgmt.easltech.com
