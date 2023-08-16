@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: jwtkey
+  namespace: bbirdai
+spec:
+  encryptedData:
+    jwtkey: AgBaLVe5J3Quw3CRdoV78s0jaBdhWv7D8oA3+0Rt3q+Al2jEZd9j6zh2pqvWPgiO/5+DLGByT8CUqDtt9/q/VCj+VnHQg+02isI37wPc/Lr+UPP7BC/NuJXwah2W+WmXnq4Qxhj3Xx06dJbPWtfUOEohhqet0Qzc2Vk8buoOmOWrSu1Ir5iceHK1Z8l38OGX29ACTkXQTcXqxaNGREfVHj6p528sUTfc0Yk51eodTrafHnxuR38WLP7qEMqZN8CgpcOBHNRlmn5XBy0mE+bcAMbkARmYeu0T2Q78m40Jc0nlAgE8Yp59dBOMlws4isORqmi5k1GTiYvURzkPL+NTkvU0/RIllF29t2X/dt1kP/MLYI7h7zxjja8UecUCQKRntRw/NG9LSXrAt62spGhjCHz528r609Z2v7P7/pb9Ehak8+c6RmW55AD4KnlqFlpe3RzZG7PY6ts2O3uhMvjxSwDkbG8udNBWttSNSxwtV+6F4UufD6qEE1m0F+GI+8m3ga+nwk/VoJ4QMrqbQtiMXFc1bVd+pntTUDP/xDwO/JC6CR3ogAm/uMLoLpyHb4wPOetkKgTJQQQV7W+aPbFs4k2V0Snw+VlfQKIAIM2jhJNUCEVl4ybhm9vEWgy0hGatgN4J334lcZlI2LZOMi8EJI3/65Q5GYc8s/VMq422dzPdKQAgd8XNT/o/xgIMMg0DpNZiIi9NB726nqKTGkohFU6ip6WptkXQsPKfcl5ewhnO0Jps/eNwvfkERUKq82eeSVDjnnHX14IXBPdqsBFtmAdjT41EigD6r9oSKATZ5OTHo65cX67BKJ4yd+5GM44A+4CLUlyYvThqxzjFAGz/DRG/S4I+MTrej+fCQlo61OJTYg==
+  template:
+    metadata:
+      name: jwtkey
+      namespace: bbirdai

@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: emailsender
+  namespace: bbirdai
+spec:
+  encryptedData:
+    password: AgBFoXqlLtTEEYNSpOmfM0ufjQltBdGuERFDtfxdLyEfsCxj9AK9hrq0BH8H25HE6kmiXQ9JqyHQ+vCEScbbOsEv0QKbOVzejenPlnWPTm0q7x2mSEoej6bK75rarVY1q3gj5+4NYyX60BBvGYZbE0i9UWvOL/gmgqwQ2ngzr9a9JleUhOt7JLhfTsp7VyovszK9+CcI0nOUEhM+5aoUGcebrorycDWuZJ15r9IDuFm9WLkLNDUHMkLZL/ANeeEt8HFl+UqN8U322SE+Her4LcVOSUZJj63Pe3ZFYAaJh/ffwVqlI68E5bSmnanOI5tYEth3K0REgQg01E182vdnVLdHhLpadCHbmcpEiqWxEg+uy6cNcOBDbJQsnqn6QX0g8xbFxC1UCl0TEYUfdqDf4ORbAgsOw5qV3iWaWMC12qbrBRz/n6akqE/UxKYwyWqX2ty/f1m/+nixgp7tDM51hBEuWuU2YWwtpidQAkTAG3ic2b8+V1gP5utnWhXjAWvwPmhLTEUMThGVVE3080EnNbjYG8vwA95Rory4acM96ph/cAWJTL2WZfse9whkBg2eltT6+qF+zkLVxjyEPTJ/CCdSBld++iynHANKeKYfuu3ku2GYupKs6YJBj+vHORiwm74egc5tO1jV5vr7LBcPvnmsby+5PuJ51J4fJ/n5jyMq0dyb49yuZLuF1BULCqr6baXACBEmLMQIh2ZEBdVecULq
+  template:
+    metadata:
+      name: emailsender
+      namespace: bbirdai
