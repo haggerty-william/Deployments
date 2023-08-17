@@ -1,0 +1,67 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: logging-api
+  namespace: bbirdai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging-api
+  template:
+    metadata:
+      labels:
+        app: logging-api
+    spec:
+      containers:
+        - name: logging-api
+          image: ghcr.io/easltech/logging-api:v1.1.2
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
+            - name: PdxAppName
+              value: logging-api
+            - name: PdxAppType
+              value: logging
+            - name: PdxClientGroup
+              value: bbirdai
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxConfigLogUpdate
+              value: 'false'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
