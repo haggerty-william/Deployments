@@ -24,7 +24,7 @@ spec:
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
-              value: default
+              value: bbirdai
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress

@@ -1,26 +1,28 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-exporter
+  name: edx-jobdispatcher
   namespace: bbirdai
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-exporter
+      app: edx-jobdispatcher
   template:
     metadata:
       labels:
-        app: edx-exporter
+        app: edx-jobdispatcher
     spec:
       containers:
-        - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v1.1.18.1
+        - name: edx-jobdispatcher
+          image: ghcr.io/easltech/edx-jobdispatcher:v1.1.18.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-exporter
+              value: edx-jobdispatcher
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
@@ -58,11 +60,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '8'
-              memory: 10Gi
+              cpu: '1'
+              memory: 1Gi
             requests:
               cpu: '1'
-              memory: 10Gi
+              memory: 1Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
@@ -74,6 +76,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      serviceAccountName: bbirdai-service-discovery-account
       imagePullSecrets:
         - name: regcred

@@ -1,26 +1,26 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-exporter
+  name: edx-emailsender
   namespace: bbirdai
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-exporter
+      app: edx-emailsender
   template:
     metadata:
       labels:
-        app: edx-exporter
+        app: edx-emailsender
     spec:
       containers:
-        - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v1.1.18.1
+        - name: edx-emailsender
+          image: ghcr.io/easltech/edx-emailsender:v1.1.18.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Production
+              value: Release
             - name: PdxAppName
-              value: edx-exporter
+              value: edx-emailsender
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
@@ -30,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -56,14 +56,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: spec.serviceAccountName
-          resources:
-            limits:
-              cpu: '8'
-              memory: 10Gi
-            requests:
-              cpu: '1'
-              memory: 10Gi
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /_health
@@ -73,7 +65,13 @@ spec:
             periodSeconds: 900
             successThreshold: 1
             failureThreshold: 3
-      restartPolicy: Always
-      serviceAccountName: bbirdai-service-discovery-account
-      imagePullSecrets:
-        - name: regcred
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+          
+  imagePullSecrets:
+    - name: regcred
