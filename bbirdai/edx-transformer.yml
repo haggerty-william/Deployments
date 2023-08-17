@@ -74,7 +74,6 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
+      serviceAccountName: bbirdai-service-discovery-account
       imagePullSecrets:
         - name: regcred
