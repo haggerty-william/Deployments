@@ -81,7 +81,7 @@ spec:
             - name: AppSettings__RabbitMqUsername
               value: "admin"
             - name: AppSettings__RabbitMqPassword
-              value: "prod1k8rmq"
+              value: "BJT.fvy6vtv*det7tdt"
             - name: PdxNodeName
             - name: EmailSettings__WebHostAddress
               value: https://bbirdaiedxmgmt.easltech.com
