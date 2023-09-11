@@ -4,7 +4,7 @@ metadata:
   name: logging-api
   namespace: bbirdai
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: logging-api
