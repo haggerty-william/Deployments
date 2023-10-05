@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v1.1.21
+          image: ghcr.io/easltech/edx-filemanager:v1.1.22.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
