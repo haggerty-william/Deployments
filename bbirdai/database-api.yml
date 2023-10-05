@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.1.13
+          image: ghcr.io/easltech/database-api:v1.1.15
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -54,11 +54,6 @@ spec:
               value: "3"
             - name: AppSettings__Issuer
               value: "bbai-mgmtui"
-            - name: AppSettings__AppTokenSecret
-              valueFrom:
-                secretKeyRef:
-                  name: jwtkey
-                  key: jwtkey
             - name: AppSettings__Secret
               valueFrom:
                 secretKeyRef:
