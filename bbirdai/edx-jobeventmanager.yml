@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.22.2
+          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.23
           resources:
             limits:
               memory: 512Mi
