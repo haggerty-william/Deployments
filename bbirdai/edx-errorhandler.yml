@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-jobeventmanager
+  name: edx-errorhandler
   namespace: bbirdai
 spec:
   selector:
     matchLabels:
-      app: edx-jobeventmanager
+      app: edx-errorhandler
   template:
     metadata:
       labels:
-        app: edx-jobeventmanager
+        app: edx-errorhandler
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.25
+        - name: edx-errorhandler
+          image: ghcr.io/easltech/edx-errorhandler:v1.1.25.2
           resources:
             limits:
               memory: 512Mi
@@ -26,19 +26,19 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: Release
+            value: Production
           - name: PdxAppName
-            value: "edx-jobeventmanager"
+            value: edx-errorhandler
           - name: PdxAppType
-            value: "edx"
+            value: edx
           - name: PdxClientGroup
-            value: "bbirdai"
+            value: bbirdai
           - name: PdxDbApiAddress
             value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: 'false'
+            value: 'true'
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -59,13 +59,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3

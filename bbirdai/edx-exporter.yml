@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v1.1.23
+          image: ghcr.io/easltech/edx-exporter:v1.1.25.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -59,7 +59,7 @@ spec:
           resources:
             limits:
               cpu: '8'
-              memory: 10Gi
+              memory: 20Gi
             requests:
               cpu: '1'
               memory: 10Gi

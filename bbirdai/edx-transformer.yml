@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.23
+          image: ghcr.io/easltech/edx-transformer:v1.1.25
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -59,7 +59,7 @@ spec:
           resources:
             limits:
               cpu: '4'
-              memory: 4Gi
+              memory: 40Gi
             requests:
               cpu: '1'
               memory: 4Gi
