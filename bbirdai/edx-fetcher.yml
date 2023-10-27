@@ -4,7 +4,7 @@ metadata:
   name: edx-fetcher
   namespace: bbirdai
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: edx-fetcher
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/easltech/edx-fetcher:v1.1.25
+          image: ghcr.io/easltech/edx-fetcher:v1.1.26-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '4'
-              memory: 8Gi
+              memory: 4Gi
             requests:
               cpu: '1'
-              memory: 8Gi
+              memory: 2Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
