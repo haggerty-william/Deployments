@@ -4,7 +4,7 @@ metadata:
   name: edx-transformer
   namespace: bbirdai
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: edx-transformer
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.25
+          image: ghcr.io/easltech/edx-transformer:v1.1.26-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '4'
-              memory: 40Gi
+              memory: 4Gi
             requests:
               cpu: '1'
-              memory: 4Gi
+              memory: 2Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

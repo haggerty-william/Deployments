@@ -1,0 +1,32 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: mock-data-api
+  namespace: bbirdai
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mock-data-api
+  template:
+    metadata:
+      labels:
+        app: mock-data-api
+    spec:
+      containers:
+        - name: mock-data-api
+          image: ghcr.io/easltech/mock-data-provider:v0.0.1-dev.1
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi
+            requests:
+              cpu: '1'
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred

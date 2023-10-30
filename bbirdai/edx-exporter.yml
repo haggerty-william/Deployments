@@ -4,7 +4,7 @@ metadata:
   name: edx-exporter
   namespace: bbirdai
 spec:
-  replicas: 4
+  replicas: 3
   selector:
     matchLabels:
       app: edx-exporter
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v1.1.25.1
+          image: ghcr.io/easltech/edx-exporter:v1.1.26.1-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -59,10 +59,10 @@ spec:
           resources:
             limits:
               cpu: '8'
-              memory: 20Gi
+              memory: 4Gi
             requests:
               cpu: '1'
-              memory: 10Gi
+              memory: 2Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
