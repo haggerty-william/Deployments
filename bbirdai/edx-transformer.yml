@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.26-bbirdai
+          image: ghcr.io/easltech/edx-transformer:v1.1.28-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
