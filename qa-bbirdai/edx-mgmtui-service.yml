@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: edx-mgmtui
+  namespace: qa-bbirdai
+spec:
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 5000
+  selector:
+    app: edx-mgmtui
+  type: ClusterIP

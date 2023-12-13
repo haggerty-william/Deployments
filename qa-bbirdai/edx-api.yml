@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edx-api
+  namespace: qa-bbirdai
+spec:
+  selector:
+    matchLabels:
+      app: edx-api
+  template:
+    metadata:
+      labels:
+        app: edx-api
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-api
+          image: ghcr.io/easltech/edx-api:v1.1.27-bbirdai
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: http://+:5000
+          - name: PdxAppName
+            value: "edx-api"
+          - name: PdxAppType
+            value: "edx"
+          - name: PdxClientGroup
+            value: "bbirdai"
+          - name: PdxDbApiAddress
+            value: "http://database-api"
+          - name: PdxLogApiAddress
+            value: "http://logging-api/Log"
+          - name: PdxConfigLogUpdate
+            value: "false"
+          - name: PdxConfigLogUpdate
+            value: 'false'
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName

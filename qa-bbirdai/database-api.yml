@@ -1,0 +1,126 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: database-api
+  namespace: qa-bbirdai
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: database-api
+  template:
+    metadata:
+      labels:
+        app: database-api
+    spec:
+      containers:
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.2.4
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: "Development"
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
+            - name: PdxDbServer
+              value: qabbirdai-mysql.qa-bbirdai-mysql
+            - name: PdxDbUser
+              value: root
+            - name: PdxDbPassword
+              value: sjdfgvhgjkSGjkhg43328
+            - name: SolrDbServer
+              value: unused
+            - name: SolrDbUser
+              value: unused
+            - name: SolrDbPassword
+              value: unused
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxClientGroup
+              value: blackbird-ai
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
+            - name: AppSettings__MaxAttemptsInLastHour
+              value: "3"
+            - name: AppSettings__Issuer
+              value: "qa-bbai-mgmtui"
+            - name: AppSettings__Secret
+              valueFrom:
+                secretKeyRef:
+                  name: jwtkey
+                  key: jwtkey
+            - name: AppSettings__LogLevel
+              value: Information
+            - name: AppSettings__TokenLifeTime
+              value: "01:00:00"
+            - name: AppSettings__RefreshTokenLifeTime
+              value: "06:00:00"
+            - name: AppSettings__DataExportDeleteRecordAgeDays
+              value: "30"
+            - name: AppSettings__TransfromDeleteRecordAgeDays
+              value: "30"
+            - name: AppSettings__RabbitMqHost
+              value: "bbirdai-rmq.bbirdai-rabbitmq"
+            - name: AppSettings__RabbitMqPort
+              value: "5672"
+            - name: AppSettings__RabbitMqUsername
+              value: "admin"
+            - name: AppSettings__RabbitMqPassword
+              value: "BJT.fvy6vtv*det7tdt"
+            - name: PdxNodeName
+            - name: EmailSettings__WebHostAddress
+              value: https://qabbirdaiedxmgmt.easltech.com
+            - name: EmailSettings__EmailSendingAddress
+              value: devops@easltech.com
+            - name: EmailSettings__EmailHost
+              value: smtp.gmail.com
+            - name: EmailSettings__EmailSendingPassword
+              valueFrom:
+                secretKeyRef:
+                  name: emailsender
+                  key: password
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: PdxServiceAccountName
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.serviceAccountName
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi
+            requests:
+              cpu: '1'
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
