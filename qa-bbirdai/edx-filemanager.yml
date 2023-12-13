@@ -2,9 +2,9 @@ kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-filemanager
-  namespace: leaflink
+  namespace: qa-bbirdai
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: edx-filemanager
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v1.1.29
+          image: ghcr.io/easltech/edx-filemanager:v1.1.28-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -25,7 +25,7 @@ spec:
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
-              value: default
+              value: qa-bbirdai
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxDbApiAddress

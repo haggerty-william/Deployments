@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.2.1
+          image: ghcr.io/easltech/database-api:v1.2.5
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -32,18 +32,6 @@ spec:
                 secretKeyRef:
                   name: dblogin
                   key: password
-            - name: SolrDbServer
-              value: ll-solorbackup-mysql
-            - name: SolrDbUser
-              valueFrom:
-                secretKeyRef:
-                  name: dblogin
-                  key: user
-            - name: SolrDbPassword
-              valueFrom:
-                secretKeyRef:
-                  name: dblogin
-                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
@@ -52,45 +40,6 @@ spec:
               value: api
             - name: PdxAppName
               value: database-api
-            - name: AppSettings__MaxAttemptsInLastHour
-              value: "3"
-            - name: AppSettings__Issuer
-              value: "llmgmtui"
-            - name: AppSettings__Secret
-              valueFrom:
-                secretKeyRef:
-                  name: jwtkey
-                  key: jwtkey
-            - name: AppSettings__LogLevel
-              value: Information
-            - name: AppSettings__TokenLifeTime
-              value: "01:00:00"
-            - name: AppSettings__RefreshTokenLifeTime
-              value: "06:00:00"
-            - name: AppSettings__DataExportDeleteRecordAgeDays
-              value: "30"
-            - name: AppSettings__TransfromDeleteRecordAgeDays
-              value: "30"
-            - name: AppSettings__RabbitMqHost
-              value: "prod1k8rmq.rabbitmq-system"
-            - name: AppSettings__RabbitMqPort
-              value: "5672"
-            - name: AppSettings__RabbitMqUsername
-              value: "admin"
-            - name: AppSettings__RabbitMqPassword
-              value: "prod1k8rmq"
-            - name: PdxNodeName
-            - name: EmailSettings__WebHostAddress
-              value: https://prodedxmgmt.easltech.com
-            - name: EmailSettings__EmailSendingAddress
-              value: devops@easltech.com
-            - name: EmailSettings__EmailHost
-              value: smtp.gmail.com
-            - name: EmailSettings__EmailSendingPassword
-              valueFrom:
-                secretKeyRef:
-                  name: emailsender
-                  key: password
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

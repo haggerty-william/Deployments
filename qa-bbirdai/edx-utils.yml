@@ -1,22 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-jobeventmanager
-  namespace: leaflink
+  name: edx-utils
+  namespace: qa-bbirdai
 spec:
   selector:
     matchLabels:
-      app: edx-jobeventmanager
+      app: edx-utils
   template:
     metadata:
       labels:
-        app: edx-jobeventmanager
+        app: edx-utils
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.29
+        - name: edx-utils
+          command: [ "/bin/bash", "-c", "--" ]
+          args: [ "while true; do sleep 30; done;" ]
+          image: ghcr.io/easltech/edx-utils:latest
           resources:
             limits:
               memory: 512Mi
@@ -26,19 +28,19 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: Release
+            value: "Release"
           - name: PdxAppName
-            value: "edx-jobeventmanager"
+            value: "edx-utils"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "bbirdai"
           - name: PdxDbApiAddress
-            value: http://database-api
+            value: "http://database-api"
           - name: PdxLogApiAddress
-            value: http://logging-api/Log
+            value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
-            value: 'false'
+            value: "false"
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -59,13 +61,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3

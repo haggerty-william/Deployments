@@ -1,35 +1,36 @@
-kind: StatefulSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-filemanager
-  namespace: leaflink
+  name: edx-jobdispatcher
+  namespace: qa-bbirdai
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-filemanager
+      app: edx-jobdispatcher
   template:
     metadata:
-      creationTimestamp: null
       labels:
-        app: edx-filemanager
+        app: edx-jobdispatcher
     spec:
       containers:
-        - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v1.1.29
+        - name: edx-jobdispatcher
+          image: ghcr.io/easltech/edx-jobdispatcher:v1.1.27-bbirdai
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Release
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-filemanager
+              value: edx-jobdispatcher
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
-              value: default
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
+              value: qa-bbirdai
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
@@ -59,11 +60,12 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '2'
-              memory: 2Gi
-            requests:
-              cpu: 500m
+              cpu: '1'
               memory: 1Gi
+            requests:
+              cpu: '1'
+              memory: 1Gi
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /_health
@@ -74,8 +76,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate

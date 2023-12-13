@@ -1,22 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-jobeventmanager
-  namespace: leaflink
+  name: edx-api
+  namespace: qa-bbirdai
 spec:
   selector:
     matchLabels:
-      app: edx-jobeventmanager
+      app: edx-api
   template:
     metadata:
       labels:
-        app: edx-jobeventmanager
+        app: edx-api
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.29
+        - name: edx-api
+          image: ghcr.io/easltech/edx-api:v1.1.27-bbirdai
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           resources:
             limits:
               memory: 512Mi
@@ -26,17 +29,21 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: Release
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: http://+:5000
           - name: PdxAppName
-            value: "edx-jobeventmanager"
+            value: "edx-api"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "bbirdai"
           - name: PdxDbApiAddress
-            value: http://database-api
+            value: "http://database-api"
           - name: PdxLogApiAddress
-            value: http://logging-api/Log
+            value: "http://logging-api/Log"
+          - name: PdxConfigLogUpdate
+            value: "false"
           - name: PdxConfigLogUpdate
             value: 'false'
           - name: PdxNodeName
@@ -59,13 +66,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: spec.serviceAccountName
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3

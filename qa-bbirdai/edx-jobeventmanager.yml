@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: edx-jobeventmanager
-  namespace: leaflink
+  namespace: qa-bbirdai
 spec:
   selector:
     matchLabels:
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.29
+          image: ghcr.io/easltech/edx-jobeventmanager:v1.1.25
           resources:
             limits:
               memory: 512Mi
@@ -32,7 +32,7 @@ spec:
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "bbirdai"
           - name: PdxDbApiAddress
             value: http://database-api
           - name: PdxLogApiAddress

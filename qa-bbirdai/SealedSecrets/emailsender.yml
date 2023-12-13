@@ -1,0 +1,12 @@
+apiVersion: bitnami.com/v1alpha1
+kind: SealedSecret
+metadata:
+  name: emailsender
+  namespace: qa-bbirdai
+spec:
+  encryptedData:
+    password: AgCBuKg1AZaTbc11tUHUGmVtwTbbpf4SxHVyJRfm3k6FakAPayJ9OyRDEof61CbakXYsqirLSTcr+3VhsKL7dJ7zFEHp4T0HoynvOyPYUu54HQOx3wwB4sUzf6TlM7zPq/T2KjWfpJMTCCpZ1Ua+afH9IUBM6DASUviORNJnnKSUyp9RXE+VcFgfw7VX+C40o9iVXi61XZ4rVn9awGgeVd3+myvYDhbmI7pX10RmQkNmQSM8n4uBlCmwAC45jFEb6Es5r3/DsfQ3p+1M3rCsQ+VqoMPMjotYufdWiTYLFulstaBaighWBDRa/MhXhXeY3mSHjZvNUxT5GgfmR2hs5296rV95BW5qSHTzqXmlkQzJgU5mLwBMrjUVxhN6PnbGQtwuB+nEzZRkjWGMFP2mZQ7exWxAZc43MWkeShG6nN2AHQwvwxK+Zf3Kj012KdI+D6/wpIj1f2QefdQjgblZ6WOVZ8w/8hG3EeTEgZt5LQ6zLastzOTeoTPJPja+P3/qVuNUdmq7OhrPQ+qcH07F/6CyNIIvdsLoIDa/0wXQANh7zKTXDDPOTyzKYETARqem/AAzji4JH5FOWDQSM/oDK/+VAn9vBeSYiGbWrVapeXB+F+Y2lEJD2ib/FyZ9GvE8YHhHRl9TtexLd9m0fyMsBxOv624g0Y2RbiXZ+bzIBdzVvOMPHDDtSj9s12Djgap1uV0Cy+PeAZxsbkwPdrW4/zgr
+  template:
+    metadata:
+      name: emailsender
+      namespace: qa-bbirdai
