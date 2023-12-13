@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v1.1.23
+          image: ghcr.io/easltech/edx-mgmtui:v1.1.29
           ports:
             - containerPort: 5000
               protocol: TCP
