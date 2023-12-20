@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.2.4
+          image: ghcr.io/easltech/database-api:v1.2.6
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -30,12 +30,6 @@ spec:
               value: root
             - name: PdxDbPassword
               value: sjdfgvhgjkSGjkhg43328
-            - name: SolrDbServer
-              value: unused
-            - name: SolrDbUser
-              value: unused
-            - name: SolrDbPassword
-              value: unused
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
@@ -44,45 +38,6 @@ spec:
               value: api
             - name: PdxAppName
               value: database-api
-            - name: AppSettings__MaxAttemptsInLastHour
-              value: "3"
-            - name: AppSettings__Issuer
-              value: "qa-bbai-mgmtui"
-            - name: AppSettings__Secret
-              valueFrom:
-                secretKeyRef:
-                  name: jwtkey
-                  key: jwtkey
-            - name: AppSettings__LogLevel
-              value: Information
-            - name: AppSettings__TokenLifeTime
-              value: "01:00:00"
-            - name: AppSettings__RefreshTokenLifeTime
-              value: "06:00:00"
-            - name: AppSettings__DataExportDeleteRecordAgeDays
-              value: "30"
-            - name: AppSettings__TransfromDeleteRecordAgeDays
-              value: "30"
-            - name: AppSettings__RabbitMqHost
-              value: "bbirdai-rmq.bbirdai-rabbitmq"
-            - name: AppSettings__RabbitMqPort
-              value: "5672"
-            - name: AppSettings__RabbitMqUsername
-              value: "admin"
-            - name: AppSettings__RabbitMqPassword
-              value: "BJT.fvy6vtv*det7tdt"
-            - name: PdxNodeName
-            - name: EmailSettings__WebHostAddress
-              value: https://qabbirdaiedxmgmt.easltech.com
-            - name: EmailSettings__EmailSendingAddress
-              value: devops@easltech.com
-            - name: EmailSettings__EmailHost
-              value: smtp.gmail.com
-            - name: EmailSettings__EmailSendingPassword
-              valueFrom:
-                secretKeyRef:
-                  name: emailsender
-                  key: password
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
