@@ -18,7 +18,7 @@ spec:
           image: ghcr.io/easltech/edx-emailsender:v1.1.25
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Release
+              value: Production
             - name: PdxAppName
               value: edx-emailsender
             - name: PdxAppType
