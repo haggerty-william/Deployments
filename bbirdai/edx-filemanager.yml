@@ -16,10 +16,10 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v1.1.28-bbirdai
+          image: ghcr.io/easltech/edx-filemanager:v1.1.31
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Release
+              value: Production
             - name: PdxAppName
               value: edx-filemanager
             - name: PdxAppType
