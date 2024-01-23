@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-api
-          image: ghcr.io/easltech/edx-api:v1.1.31
+          image: ghcr.io/easltech/edx-api:v1.1.31.1
           ports:
             - containerPort: 5000
               protocol: TCP
