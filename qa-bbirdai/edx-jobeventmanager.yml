@@ -32,7 +32,7 @@ spec:
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "bbirdai"
+            value: "qa-bbirdai"
           - name: PdxDbApiAddress
             value: http://database-api
           - name: PdxLogApiAddress
