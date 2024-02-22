@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-transformer
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.29
+          image: ghcr.io/easltech/edx-transformer:v2.0.0.14
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -24,7 +24,7 @@ spec:
             - name: PdxAppType
               value: edx
             - name: PdxClientGroup
-              value: default
+              value: leaflink
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
