@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.2.8
+          image: ghcr.io/easltech/database-api:v1.2.9
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -35,7 +35,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
-              value: default
+              value: leaflink
             - name: PdxAppType
               value: api
             - name: PdxAppName
