@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v2.0.0.14
+          image: ghcr.io/easltech/edx-transformer:v2.0.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
