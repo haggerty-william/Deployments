@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-errorhandler
-          image: ghcr.io/easltech/edx-errorhandler:v1.1.31
+          image: ghcr.io/easltech/edx-errorhandler:v2.0.1
           resources:
             limits:
               memory: 512Mi
@@ -38,7 +38,7 @@ spec:
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: 'true'
+            value: 'false'
           - name: PdxNodeName
             valueFrom:
               fieldRef:

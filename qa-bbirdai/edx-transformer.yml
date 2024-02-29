@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-transformer
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v1.1.31
+          image: ghcr.io/easltech/edx-transformer:v2.0.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -30,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

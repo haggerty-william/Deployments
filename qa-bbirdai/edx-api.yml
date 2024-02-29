@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-api
-          image: ghcr.io/easltech/edx-api:v1.1.31.1
+          image: ghcr.io/easltech/edx-api:v2.0.1
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -44,8 +44,6 @@ spec:
             value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
             value: "false"
-          - name: PdxConfigLogUpdate
-            value: 'false'
           - name: PdxNodeName
             valueFrom:
               fieldRef:
