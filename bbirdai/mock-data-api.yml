@@ -15,10 +15,25 @@ spec:
     spec:
       containers:
         - name: mock-data-api
-          image: ghcr.io/easltech/mock-data-provider:v0.0.1-dev.1
+          image: ghcr.io/easltech/mock-data-provider:v1.0.0
           ports:
             - containerPort: 80
               protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:80
+            - name: PdxAppName
+              value: mock-data-api
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: bbirdai
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'false'
           resources:
             limits:
               cpu: '2'

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v1.1.31
+          image: ghcr.io/easltech/edx-jobdispatcher:v2.0.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
@@ -32,7 +32,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
