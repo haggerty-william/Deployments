@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-fetcher
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/easltech/edx-fetcher:v1.1.31.2
+          image: ghcr.io/easltech/edx-fetcher:v2.0.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
@@ -30,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
