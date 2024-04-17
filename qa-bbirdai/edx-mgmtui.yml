@@ -65,11 +65,11 @@ spec:
                   fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '8'
-              memory: 1Gi
+              cpu: '4'
+              memory: 4Gi
             requests:
               cpu: '1'
-              memory: 512Mi
+              memory: 1Gi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:
