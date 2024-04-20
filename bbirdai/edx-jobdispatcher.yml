@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v2.0.2
+          image: ghcr.io/easltech/edx-jobdispatcher:v2.0.4
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
