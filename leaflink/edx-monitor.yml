@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-jobeventmanager
+  name: edx-monitor
   namespace: leaflink
 spec:
   selector:
     matchLabels:
-      app: edx-jobeventmanager
+      app: edx-monitor
   template:
     metadata:
       labels:
-        app: edx-jobeventmanager
+        app: edx-monitor
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanagerv2.0.5
+        - name: edx-monitor
+          image: ghcr.io/easltech/edx-monitor:v1.0.0
           resources:
             limits:
               memory: 512Mi
@@ -26,19 +26,29 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: Release
+            value: "Release"
           - name: PdxAppName
-            value: "edx-jobeventmanager"
+            value: "edx-monitor"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
             value: "leaflink"
-          - name: PdxDbApiAddress
-            value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: 'false'
+            value: "true"
+          - name: PdxDbServer
+            value: mysql-internal.mysql
+          - name: PdxDbUser
+            valueFrom:
+              secretKeyRef:
+                 name: dblogin
+                 key: user
+          - name: PdxDbPassword
+            valueFrom:
+              secretKeyRef:
+                name: dblogin
+                key: password
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -55,17 +65,3 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: PdxServiceAccountName
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.serviceAccountName
-          imagePullPolicy: IfNotPresent
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3
