@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-monitor
-          image: ghcr.io/easltech/edx-monitor:v1.0.0
+          image: ghcr.io/easltech/edx-monitor:v1.0.1
           resources:
             limits:
               memory: 512Mi
