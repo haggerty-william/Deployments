@@ -27,9 +27,15 @@ spec:
             - name: PdxDbServer
               value: qabbirdai-mysql.qa-bbirdai-mysql
             - name: PdxDbUser
-              value: root
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
             - name: PdxDbPassword
-              value: sjdfgvhgjkSGjkhg43328
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
