@@ -1,0 +1,79 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: database-api
+  namespace: easl-demo
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: database-api
+  template:
+    metadata:
+      labels:
+        app: database-api
+    spec:
+      containers:
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.3.1
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: PdxDbServer
+              value: easl-demo-mysql.easl-demo-mysql
+            - name: PdxDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxClientGroup
+              value: easl-demo
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          resources:
+            limits:
+              cpu: '2'
+              memory: 1Gi
+            requests:
+              cpu: '1'
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred

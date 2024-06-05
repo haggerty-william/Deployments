@@ -1,0 +1,71 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: edx-emailsender
+  namespace: easl-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-emailsender
+  template:
+    metadata:
+      labels:
+        app: edx-emailsender
+    spec:
+      containers:
+        - name: edx-emailsender
+          image: ghcr.io/easltech/edx-emailsender:v2.0.5
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Release
+            - name: PdxAppName
+              value: edx-emailsender
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: easl-demo
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'false'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            limits:
+              cpu: '1'
+              memory: 512Mi
+            requests:
+              cpu: 200m
+              memory: 256Mi
+      imagePullSecrets:
+        - name: regcred

@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: edx-jobeventmanager
+  namespace: easl-demo
+spec:
+  selector:
+    matchLabels:
+      app: edx-jobeventmanager
+  template:
+    metadata:
+      labels:
+        app: edx-jobeventmanager
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-jobeventmanager
+          image: ghcr.io/easltech/edx-jobeventmanager:v2.0.5
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Release
+          - name: PdxAppName
+            value: "edx-jobeventmanager"
+          - name: PdxAppType
+            value: "edx"
+          - name: PdxClientGroup
+            value: "easl-demo"
+          - name: PdxDbApiAddress
+            value: http://database-api
+          - name: PdxLogApiAddress
+            value: http://logging-api/Log
+          - name: PdxConfigLogUpdate
+            value: 'false'
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3

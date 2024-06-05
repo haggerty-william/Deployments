@@ -1,0 +1,73 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-exporter
+  namespace: easl-demo
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: edx-exporter
+  template:
+    metadata:
+      labels:
+        app: edx-exporter
+    spec:
+      containers:
+        - name: edx-exporter
+          image: ghcr.io/easltech/edx-exporter:v2.0.5
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: PdxAppName
+              value: edx-exporter
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: easl-demo
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          resources:
+            limits:
+              cpu: '8'
+              memory: 10Gi
+            requests:
+              cpu: '1'
+              memory: 10Gi
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred

@@ -1,0 +1,73 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-transformer
+  namespace: easl-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-transformer
+  template:
+    metadata:
+      labels:
+        app: edx-transformer
+    spec:
+      containers:
+        - name: edx-transformer
+          image: ghcr.io/easltech/edx-transformer:v2.0.5
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: PdxAppName
+              value: edx-transformer
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: easl-demo
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          resources:
+            limits:
+              cpu: '4'
+              memory: 8Gi
+            requests:
+              cpu: '1'
+              memory: 4Gi
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
