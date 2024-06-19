@@ -1,75 +1,62 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: leaflink
+  name: logging-api
+  namespace: easl-demo
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: logging-api
   template:
     metadata:
       labels:
-        app: edx-mgmtui
+        app: logging-api
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.5
+        - name: logging-api
+          image: ghcr.io/easltech/logging-api:v1.1.6
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Production
+              value: Development
             - name: ASPNETCORE_URLS
               value: http://+:5000
             - name: PdxAppName
-              value: edx-mgmtui
+              value: logging-api
             - name: PdxAppType
-              value: mgmt
+              value: logging
             - name: PdxClientGroup
-              value: leaflink
+              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxAuthApiAddress
-              value: http://auth-api
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: spec.nodeName
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '8'
+              cpu: '2'
               memory: 1Gi
             requests:
-              cpu: '1'
-              memory: 512Mi
+              cpu: 200m
+              memory: 256Mi
           imagePullPolicy: IfNotPresent
       restartPolicy: Always
       imagePullSecrets:

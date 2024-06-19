@@ -1,22 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-monitor
-  namespace: leaflink
+  name: edx-api
+  namespace: easl-demo
 spec:
   selector:
     matchLabels:
-      app: edx-monitor
+      app: edx-api
   template:
     metadata:
       labels:
-        app: edx-monitor
+        app: edx-api
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-monitor
-          image: ghcr.io/easltech/edx-monitor:v1.0.2
+        - name: edx-api
+          image: ghcr.io/easltech/edx-api:v2.0.6
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           resources:
             limits:
               memory: 512Mi
@@ -26,29 +29,21 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: "Release"
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: http://+:5000
           - name: PdxAppName
-            value: "edx-monitor"
+            value: "edx-api"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "easl-demo"
+          - name: PdxDbApiAddress
+            value: "http://database-api"
           - name: PdxLogApiAddress
-            value: http://logging-api/Log
+            value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
-            value: "true"
-          - name: PdxDbServer
-            value: mysql-internal.mysql
-          - name: PdxDbUser
-            valueFrom:
-              secretKeyRef:
-                 name: dblogin
-                 key: user
-          - name: PdxDbPassword
-            valueFrom:
-              secretKeyRef:
-                name: dblogin
-                key: password
+            value: "false"
           - name: PdxNodeName
             valueFrom:
               fieldRef:

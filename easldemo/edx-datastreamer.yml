@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-monitor
-  namespace: leaflink
+  name: edx-datastreamer
+  namespace: easl-demo
 spec:
   selector:
     matchLabels:
-      app: edx-monitor
+      app: edx-datastreamer
   template:
     metadata:
       labels:
-        app: edx-monitor
+        app: edx-datastreamer
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-monitor
-          image: ghcr.io/easltech/edx-monitor:v1.0.2
+        - name: edx-datastreamer
+          image: ghcr.io/easltech/edx-datastreamer:v2.0.6-datastream
           resources:
             limits:
               memory: 512Mi
@@ -26,29 +26,19 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: "Release"
+            value: "Development"
           - name: PdxAppName
-            value: "edx-monitor"
+            value: "edx-datastreamer"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "easl-demo"
+          - name: PdxDbApiAddress
+            value: "http://database-api"
           - name: PdxLogApiAddress
-            value: http://logging-api/Log
+            value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
             value: "true"
-          - name: PdxDbServer
-            value: mysql-internal.mysql
-          - name: PdxDbUser
-            valueFrom:
-              secretKeyRef:
-                 name: dblogin
-                 key: user
-          - name: PdxDbPassword
-            valueFrom:
-              secretKeyRef:
-                name: dblogin
-                key: password
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -65,3 +55,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName

@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: edx-monitor
-  namespace: leaflink
+  namespace: easl-demo
 spec:
   selector:
     matchLabels:
@@ -32,13 +32,13 @@ spec:
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "leaflink"
+            value: "easl-demo"
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
             value: "true"
           - name: PdxDbServer
-            value: mysql-internal.mysql
+            value: easl-demo-mysql.easl-demo-mysql
           - name: PdxDbUser
             valueFrom:
               secretKeyRef:

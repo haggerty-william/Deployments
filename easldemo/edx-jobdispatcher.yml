@@ -1,49 +1,38 @@
-kind: StatefulSet
+kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: database-api
-  namespace: qa-bbirdai
+  name: edx-jobdispatcher
+  namespace: easl-demo
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: database-api
+      app: edx-jobdispatcher
   template:
     metadata:
       labels:
-        app: database-api
+        app: edx-jobdispatcher
     spec:
       containers:
-        - name: database-api
-          image: ghcr.io/easltech/database-api:v1.3.0.1
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-jobdispatcher
+          image: ghcr.io/easltech/edx-jobdispatcher:v2.0.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: "Development"
+              value: Production
             - name: ASPNETCORE_URLS
               value: http://+:5000
-            - name: PdxDbServer
-              value: qabbirdai-mysql.qa-bbirdai-mysql
-            - name: PdxDbUser
-              valueFrom:
-                secretKeyRef:
-                  name: dblogin
-                  key: user
-            - name: PdxDbPassword
-              valueFrom:
-                secretKeyRef:
-                  name: dblogin
-                  key: password
+            - name: PdxAppName
+              value: edx-jobdispatcher
+            - name: PdxAppType
+              value: edx
+            - name: PdxClientGroup
+              value: easl-demo
+            - name: PdxDbApiAddress
+              value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxClientGroup
-              value: blackbird-ai
-            - name: PdxAppType
-              value: api
-            - name: PdxAppName
-              value: database-api
+            - name: PdxConfigLogUpdate
+              value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -52,26 +41,25 @@ spec:
             - name: PdxPodName
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
+                  apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
-              cpu: '2'
+              cpu: '1'
               memory: 1Gi
             requests:
               cpu: '1'
-              memory: 256Mi
+              memory: 1Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

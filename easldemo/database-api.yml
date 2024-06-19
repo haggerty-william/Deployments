@@ -2,7 +2,7 @@ kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: database-api
-  namespace: qa-bbirdai
+  namespace: easl-demo
 spec:
   replicas: 2
   selector:
@@ -15,17 +15,13 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.3.0.1
+          image: ghcr.io/easltech/database-api:v1.3.2
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: "Development"
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
             - name: PdxDbServer
-              value: qabbirdai-mysql.qa-bbirdai-mysql
+              value: easl-demo-mysql.easl-demo-mysql
             - name: PdxDbUser
               valueFrom:
                 secretKeyRef:
@@ -39,7 +35,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxClientGroup
-              value: blackbird-ai
+              value: easl-demo
             - name: PdxAppType
               value: api
             - name: PdxAppName
@@ -61,10 +57,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '2'
