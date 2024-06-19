@@ -10,13 +10,12 @@ spec:
       app: edx-filemanager
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: edx-filemanager
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v2.0.5
+          image: ghcr.io/easltech/edx-filemanager:v2.0.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release

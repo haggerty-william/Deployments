@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v2.0.5-datastream
+          image: ghcr.io/easltech/edx-datastreamer:v2.0.6-datastream
           resources:
             limits:
               memory: 512Mi

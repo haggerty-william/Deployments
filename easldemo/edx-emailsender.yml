@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-emailsender
-          image: ghcr.io/easltech/edx-emailsender:v2.0.5
+          image: ghcr.io/easltech/edx-emailsender:v2.0.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
