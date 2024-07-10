@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-api
-  namespace: easl-demo
+  name: edx-datastreamer
+  namespace: basepoint
 spec:
   selector:
     matchLabels:
-      app: edx-api
+      app: edx-datastreamer
   template:
     metadata:
       labels:
-        app: edx-api
+        app: edx-datastreamer
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-api
-          image: ghcr.io/easltech/edx-api:v2.0.6.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-datastreamer
+          image: ghcr.io/easltech/edx-datastreamer:v2.0.6.2
           resources:
             limits:
               memory: 512Mi
@@ -30,20 +27,16 @@ spec:
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: "Development"
-          - name: ASPNETCORE_URLS
-            value: http://+:5000
           - name: PdxAppName
-            value: "edx-api"
+            value: "edx-datastreamer"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "easl-demo"
           - name: PdxDbApiAddress
             value: "http://database-api"
           - name: PdxLogApiAddress
             value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
-            value: "false"
+            value: "true"
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -60,3 +53,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName

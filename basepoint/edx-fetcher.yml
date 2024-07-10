@@ -1,35 +1,28 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: easl-demo
+  name: edx-fetcher
+  namespace: basepoint
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: edx-fetcher
   template:
     metadata:
       labels:
-        app: edx-mgmtui
+        app: edx-fetcher
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-fetcher
+          image: ghcr.io/easltech/edx-fetcher:v2.0.6.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
             - name: PdxAppName
-              value: edx-mgmtui
+              value: edx-fetcher
             - name: PdxAppType
-              value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
+              value: edx
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
@@ -58,12 +51,21 @@ spec:
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '8'
-              memory: 1Gi
+              cpu: '4'
+              memory: 20Gi
             requests:
               cpu: '1'
-              memory: 512Mi
+              memory: 8Gi
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred

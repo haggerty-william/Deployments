@@ -1,41 +1,34 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: easl-demo
+  name: edx-emailsender
+  namespace: basepoint
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: edx-emailsender
   template:
     metadata:
       labels:
-        app: edx-mgmtui
+        app: edx-emailsender
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-emailsender
+          image: ghcr.io/easltech/edx-emailsender:v2.0.6.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Production
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
+              value: Release
             - name: PdxAppName
-              value: edx-mgmtui
+              value: edx-emailsender
             - name: PdxAppType
-              value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
+              value: edx
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -56,14 +49,21 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
           resources:
             limits:
-              cpu: '8'
-              memory: 1Gi
-            requests:
               cpu: '1'
               memory: 512Mi
-          imagePullPolicy: IfNotPresent
-      restartPolicy: Always
+            requests:
+              cpu: 200m
+              memory: 256Mi
       imagePullSecrets:
         - name: regcred

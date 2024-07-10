@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: edx-api
-  namespace: easl-demo
+  name: edx-monitor
+  namespace: basepoint
 spec:
   selector:
     matchLabels:
-      app: edx-api
+      app: edx-monitor
   template:
     metadata:
       labels:
-        app: edx-api
+        app: edx-monitor
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-api
-          image: ghcr.io/easltech/edx-api:v2.0.6.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-monitor
+          image: ghcr.io/easltech/edx-monitor:v1.0.2
           resources:
             limits:
               memory: 512Mi
@@ -29,21 +26,29 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: "Development"
-          - name: ASPNETCORE_URLS
-            value: http://+:5000
+            value: "Release"
           - name: PdxAppName
-            value: "edx-api"
+            value: "edx-monitor"
           - name: PdxAppType
             value: "edx"
           - name: PdxClientGroup
-            value: "easl-demo"
-          - name: PdxDbApiAddress
-            value: "http://database-api"
+            value: basepoint
           - name: PdxLogApiAddress
-            value: "http://logging-api/Log"
+            value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: "false"
+            value: "true"
+          - name: PdxDbServer
+            value: basepoint-mysql.basepoint-mysql
+          - name: PdxDbUser
+            valueFrom:
+              secretKeyRef:
+                 name: dblogin
+                 key: user
+          - name: PdxDbPassword
+            valueFrom:
+              secretKeyRef:
+                name: dblogin
+                key: password
           - name: PdxNodeName
             valueFrom:
               fieldRef:

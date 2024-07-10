@@ -1,41 +1,43 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: easl-demo
+  name: database-api
+  namespace: basepoint
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: database-api
   template:
     metadata:
       labels:
-        app: edx-mgmtui
+        app: database-api
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.3
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.3.2.1
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
-            - name: PdxAppName
-              value: edx-mgmtui
-            - name: PdxAppType
-              value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
-            - name: PdxDbApiAddress
-              value: http://database-api
+            - name: PdxDbServer
+              value: basepoint-mysql.basepoint-mysql
+            - name: PdxDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxConfigLogUpdate
-              value: 'true'
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -44,26 +46,32 @@ spec:
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '8'
+              cpu: '2'
               memory: 1Gi
             requests:
               cpu: '1'
-              memory: 512Mi
+              memory: 256Mi
           imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
       imagePullSecrets:
         - name: regcred

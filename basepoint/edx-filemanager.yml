@@ -1,39 +1,32 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-mgmtui
-  namespace: easl-demo
+  name: edx-filemanager
+  namespace: basepoint
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-mgmtui
+      app: edx-filemanager
   template:
     metadata:
       labels:
-        app: edx-mgmtui
+        app: edx-filemanager
     spec:
       containers:
-        - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.3
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-filemanager
+          image: ghcr.io/easltech/edx-filemanager:v2.0.6.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Production
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
+              value: Release
             - name: PdxAppName
-              value: edx-mgmtui
+              value: edx-filemanager
             - name: PdxAppType
-              value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
-            - name: PdxDbApiAddress
-              value: http://database-api
+              value: edx
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxDbApiAddress
+              value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
@@ -58,12 +51,23 @@ spec:
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '8'
-              memory: 1Gi
+              cpu: '2'
+              memory: 2Gi
             requests:
-              cpu: '1'
-              memory: 512Mi
-          imagePullPolicy: IfNotPresent
+              cpu: 500m
+              memory: 1Gi
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
       restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
+  updateStrategy:
+    type: RollingUpdate

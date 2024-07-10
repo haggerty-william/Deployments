@@ -2,7 +2,7 @@ kind: Deployment
 apiVersion: apps/v1
 metadata:
   name: edx-mgmtui
-  namespace: easl-demo
+  namespace: basepoint
 spec:
   replicas: 1
   selector:
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.3
+          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.2
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -28,8 +28,6 @@ spec:
               value: edx-mgmtui
             - name: PdxAppType
               value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
