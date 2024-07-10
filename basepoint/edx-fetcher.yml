@@ -1,0 +1,71 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-fetcher
+  namespace: basepoint
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-fetcher
+  template:
+    metadata:
+      labels:
+        app: edx-fetcher
+    spec:
+      containers:
+        - name: edx-fetcher
+          image: ghcr.io/easltech/edx-fetcher:v2.0.6.2
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: PdxAppName
+              value: edx-fetcher
+            - name: PdxAppType
+              value: edx
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          resources:
+            limits:
+              cpu: '4'
+              memory: 20Gi
+            requests:
+              cpu: '1'
+              memory: 8Gi
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
