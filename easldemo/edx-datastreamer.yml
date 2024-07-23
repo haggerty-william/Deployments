@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-datastreamer
   namespace: easl-demo
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v2.0.6-datastream
+          image: ghcr.io/easltech/edx-datastreamer:v3.0.0
           resources:
             limits:
               memory: 512Mi
@@ -31,14 +31,14 @@ spec:
             value: "edx-datastreamer"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "easl-demo"
           - name: PdxDbApiAddress
             value: "http://database-api"
           - name: PdxLogApiAddress
             value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
             value: "true"
+          - name: PdxLogFilepath
+            value: /app/log/edx-datastreamer-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:

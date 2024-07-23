@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: mock-data-file-stream
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: mock-data-file-stream
-          image: ghcr.io/easltech/mock-data-file-stream:v1.0.1-dev.7
+          image: ghcr.io/easltech/mock-data-file-stream:v1.0.2
           ports:
             - containerPort: 80
               protocol: TCP
@@ -24,14 +24,34 @@ spec:
               value: mock-data-file-stream
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'false'
+            - name: PdxLogFilepath
+              value: /app/log/edx-mock-data-file-stream-.log
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
           resources:
             limits:
               cpu: '2'

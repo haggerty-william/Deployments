@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-monitor
   namespace: easl-demo
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-monitor
-          image: ghcr.io/easltech/edx-monitor:v1.0.2
+          image: ghcr.io/easltech/edx-monitor:v1.0.3
           resources:
             limits:
               memory: 512Mi
@@ -31,12 +31,12 @@ spec:
             value: "edx-monitor"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "easl-demo"
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
             value: "true"
+          - name: PdxLogFilepath
+            value: /app/log/edx-monitor-.log
           - name: PdxDbServer
             value: easl-demo-mysql.easl-demo-mysql
           - name: PdxDbUser
