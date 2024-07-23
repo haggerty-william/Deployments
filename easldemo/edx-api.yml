@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-api
   namespace: easl-demo
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-api
-          image: ghcr.io/easltech/edx-api:v2.0.6.3
+          image: ghcr.io/easltech/edx-api:v3.0.0
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -36,14 +36,14 @@ spec:
             value: "edx-api"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "easl-demo"
           - name: PdxDbApiAddress
             value: "http://database-api"
           - name: PdxLogApiAddress
             value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
             value: "false"
+          - name: PdxLogFilepath
+            value: /app/log/edx-datastreamer-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:

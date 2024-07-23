@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.3.2.1
+          image: ghcr.io/easltech/database-api:v1.3.3.1
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -34,8 +34,8 @@ spec:
                   key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxClientGroup
-              value: easl-demo
+            - name: PdxLogFilepath
+              value: /app/log/db-api-.log
             - name: PdxAppType
               value: api
             - name: PdxAppName

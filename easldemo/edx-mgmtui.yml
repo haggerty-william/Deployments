@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-mgmtui
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v2.0.6.6
+          image: ghcr.io/easltech/edx-mgmtui:v3.0.0
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -28,14 +28,14 @@ spec:
               value: edx-mgmtui
             - name: PdxAppType
               value: mgmt
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
+            - name: PdxLogFilepath
+              value: /app/log/edx-mgmtui-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

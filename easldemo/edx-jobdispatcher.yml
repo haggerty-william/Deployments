@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-jobdispatcher
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v2.0.6
+          image: ghcr.io/easltech/edx-jobdispatcher:v3.0.0
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -25,14 +25,14 @@ spec:
               value: edx-jobdispatcher
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxLogFilepath
+              value: /app/log/edx-jobdispatcher-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

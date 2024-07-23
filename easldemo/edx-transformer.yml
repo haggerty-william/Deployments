@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v2.0.6
+          image: ghcr.io/easltech/edx-transformer:v3.0.0
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -23,14 +23,14 @@ spec:
               value: edx-transformer
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxLogFilepath
+              value: /app/log/edx-transformer-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

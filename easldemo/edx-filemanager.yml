@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v2.0.6
+          image: ghcr.io/easltech/edx-filemanager:v3.0.0
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -23,14 +23,14 @@ spec:
               value: edx-filemanager
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: easl-demo
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxLogFilepath
+              value: /app/log/edx-filemanager-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
