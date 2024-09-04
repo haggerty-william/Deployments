@@ -4,7 +4,7 @@ metadata:
   name: edx-transformer
   namespace: leaflink
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: edx-transformer
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformerv2.0.5
+          image: ghcr.io/easltech/edx-transformer:v3.0.1.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -23,12 +23,12 @@ spec:
               value: edx-transformer
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: leaflink
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxLogFilepath
+              value: /app/log/edx-transformer-.log
             - name: PdxConfigLogUpdate
               value: 'true'
             - name: PdxNodeName
@@ -51,11 +51,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '4'
@@ -74,7 +69,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred

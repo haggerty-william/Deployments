@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-jobeventmanager
   namespace: leaflink
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanagerv2.0.5
+          image: ghcr.io/easltech/edx-jobeventmanager:v3.0.1.1
           resources:
             limits:
               memory: 512Mi
@@ -31,12 +31,12 @@ spec:
             value: "edx-jobeventmanager"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "leaflink"
           - name: PdxDbApiAddress
             value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
+          - name: PdxLogFilepath
+            value: /app/log/edx-monitor-.log
           - name: PdxConfigLogUpdate
             value: 'false'
           - name: PdxNodeName
@@ -55,10 +55,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: PdxServiceAccountName
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.serviceAccountName
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

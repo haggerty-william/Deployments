@@ -4,7 +4,7 @@ metadata:
   name: edx-exporter
   namespace: leaflink
 spec:
-  replicas: 4
+  replicas: 5
   selector:
     matchLabels:
       app: edx-exporter
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporterv2.0.5
+          image: ghcr.io/easltech/edx-exporter:v3.0.1.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -23,8 +23,6 @@ spec:
               value: edx-exporter
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: leaflink
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxLogApiAddress
@@ -51,11 +49,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '8'
@@ -74,7 +67,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      serviceAccountName: service-discovery-account
-      serviceAccount: service-discovery-account
       imagePullSecrets:
         - name: regcred
