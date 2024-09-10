@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-api
   namespace: basepoint
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-api
-          image: ghcr.io/easltech/edx-api:v2.0.6.2
+          image: ghcr.io/easltech/edx-api:v3.0.1.1
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -42,6 +42,8 @@ spec:
             value: "http://logging-api/Log"
           - name: PdxConfigLogUpdate
             value: "false"
+          - name: PdxLogFilepath
+            value: /app/log/edx-datastreamer-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:

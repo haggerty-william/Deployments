@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v2.0.6.2
+          image: ghcr.io/easltech/edx-exporter:v3.0.1.3
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -29,6 +29,8 @@ spec:
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxLogFilepath
+              value: /app/log/edx-exporter-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

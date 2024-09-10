@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v2.0.6.2
+          image: ghcr.io/easltech/edx-filemanager:v3.0.1.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -29,6 +29,8 @@ spec:
               value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'true'
+            - name: PdxLogFilepath
+              value: /app/log/edx-filemanager-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

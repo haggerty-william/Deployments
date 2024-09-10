@@ -1,4 +1,4 @@
-kind: Deployment
+kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-emailsender
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-emailsender
-          image: ghcr.io/easltech/edx-emailsender:v2.0.6.2
+          image: ghcr.io/easltech/edx-emailsender:v3.0.1.1
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -29,6 +29,8 @@ spec:
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'false'
+            - name: PdxLogFilepath
+              value: /app/log/edx-emailsender-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
