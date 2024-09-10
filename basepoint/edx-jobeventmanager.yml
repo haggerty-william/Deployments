@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-jobeventmanager
   namespace: basepoint
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v2.0.6.2
+          image: ghcr.io/easltech/edx-jobeventmanager:v3.0.1.1
           resources:
             limits:
               memory: 512Mi
@@ -37,6 +37,8 @@ spec:
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
             value: 'false'
+          - name: PdxLogFilepath
+            value: /app/log/edx-monitor-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:
