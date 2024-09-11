@@ -43,7 +43,7 @@ spec:
           - name: PdxConfigLogUpdate
             value: "false"
           - name: PdxLogFilepath
-            value: /app/log/edx-datastreamer-.log
+            value: /app/log/edx-api-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:

@@ -10,13 +10,12 @@ spec:
       app: edx-filemanager
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: edx-filemanager
     spec:
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v2.0.4
+          image: ghcr.io/easltech/edx-filemanager:v3.0.1.4
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Release
@@ -24,10 +23,10 @@ spec:
               value: edx-filemanager
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: qa-bbirdai
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxLogFilepath
+              value: /app/log/edx-filemanager-.log
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxConfigLogUpdate
@@ -52,11 +51,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '2'
