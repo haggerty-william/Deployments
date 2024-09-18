@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v3.0.1.5
+          image: ghcr.io/easltech/edx-exporter:v3.0.1.6
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
