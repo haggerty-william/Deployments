@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: edx-jobeventmanager
   namespace: bbirdai
@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v2.0.4
+          image: ghcr.io/easltech/edx-jobeventmanager:v3.0.1.4
           resources:
             limits:
               memory: 512Mi
@@ -26,19 +26,19 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: Production
+            value: Release
           - name: PdxAppName
             value: "edx-jobeventmanager"
           - name: PdxAppType
             value: "edx"
-          - name: PdxClientGroup
-            value: "bbirdai"
           - name: PdxDbApiAddress
             value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxConfigLogUpdate
             value: 'false'
+          - name: PdxLogFilepath
+            value: /app/log/edx-jobeventmanager-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:
@@ -55,10 +55,6 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
-          - name: PdxServiceAccountName
-            valueFrom:
-              fieldRef:
-                fieldPath: spec.serviceAccountName
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
