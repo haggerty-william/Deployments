@@ -1,25 +1,22 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: edx-api
+  name: edx-errorhandler
   namespace: bbirdai
 spec:
   selector:
     matchLabels:
-      app: edx-api
+      app: edx-errorhandler
   template:
     metadata:
       labels:
-        app: edx-api
+        app: edx-errorhandler
     spec:
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-api
-          image: ghcr.io/easltech/edx-api:v3.0.1.4
-          ports:
-            - containerPort: 5000
-              protocol: TCP
+        - name: edx-errorhandler
+          image: ghcr.io/easltech/edx-errorhandler:v3.0.1.4
           resources:
             limits:
               memory: 512Mi
@@ -29,21 +26,19 @@ spec:
               cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
-            value: "Production"
-          - name: ASPNETCORE_URLS
-            value: http://+:5000
+            value: Production
           - name: PdxAppName
-            value: "edx-api"
+            value: edx-errorhandler
           - name: PdxAppType
-            value: "edx"
+            value: edx
           - name: PdxDbApiAddress
-            value: "http://database-api"
+            value: http://database-api
           - name: PdxLogApiAddress
-            value: "http://logging-api/Log"
+            value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: "false"
+            value: 'false'
           - name: PdxLogFilepath
-            value: /app/log/edx-api-.log
+            value: /app/log/edx-errorhandler-.log
           - name: PdxNodeName
             valueFrom:
               fieldRef:

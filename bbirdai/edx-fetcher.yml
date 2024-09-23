@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-fetcher
-          image: ghcr.io/easltech/edx-fetcher:v2.0.4.2
+          image: ghcr.io/easltech/edx-fetcher:v3.0.1.4
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: "Production"
