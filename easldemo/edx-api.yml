@@ -12,6 +12,10 @@ spec:
       labels:
         app: edx-api
     spec:
+      hostAliases:
+      - ip: "10.7.0.20"
+        hostnames:
+        - "prodceph.easltech.com"
       imagePullSecrets:
         - name: regcred
       containers:
