@@ -13,6 +13,10 @@ spec:
       labels:
         app: edx-fetcher
     spec:
+      hostAliases:
+      - ip: "10.7.0.20"
+        hostnames:
+        - "prodceph.easltech.com"
       containers:
         - name: edx-fetcher
           image: ghcr.io/easltech/edx-fetcher:v3.0.2
