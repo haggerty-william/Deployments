@@ -20,7 +20,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v3.0.2
+          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
           resources:
             limits:
               memory: 512Mi
@@ -43,6 +43,8 @@ spec:
             value: "true"
           - name: PdxLogFilepath
             value: /app/log/edx-datastreamer-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName
             valueFrom:
               fieldRef:

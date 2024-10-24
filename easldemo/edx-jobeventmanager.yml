@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-jobeventmanager
-          image: ghcr.io/easltech/edx-jobeventmanager:v3.0.2
+          image: ghcr.io/easltech/edx-jobeventmanager:v3.1.0
           resources:
             limits:
               memory: 512Mi
@@ -38,7 +38,9 @@ spec:
           - name: PdxConfigLogUpdate
             value: 'false'
           - name: PdxLogFilepath
-            value: /app/log/edx-monitor-.log
+            value: /app/log/edx-jobeventmanager-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName
             valueFrom:
               fieldRef:

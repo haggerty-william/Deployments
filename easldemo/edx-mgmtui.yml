@@ -19,7 +19,7 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v3.0.2
+          image: ghcr.io/easltech/edx-mgmtui:v3.1.0
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -40,6 +40,8 @@ spec:
               value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-mgmtui-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.3.5
+          image: ghcr.io/easltech/database-api:v1.3.6
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -36,6 +36,8 @@ spec:
               value: http://logging-api/Log
             - name: PdxLogFilepath
               value: /app/log/db-api-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxAppType
               value: api
             - name: PdxAppName
