@@ -36,7 +36,9 @@ spec:
           - name: PdxLogApiAddress
             value: http://logging-api/Log
           - name: PdxLogFilepath
-            value: /app/log/edx-monitor-.log
+            value: /app/log/edx-jobeventmanager-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxConfigLogUpdate
             value: 'false'
           - name: PdxNodeName
