@@ -13,6 +13,10 @@ spec:
       labels:
         app: edx-fetcher
     spec:
+      hostAliases:
+      - ip: "10.7.0.20"
+        hostnames:
+        - "prodceph.easltech.com"
       containers:
         - name: edx-fetcher
           image: ghcr.io/easltech/edx-fetcher:v3.0.1.1
@@ -31,6 +35,8 @@ spec:
               value: 'true'
             - name: PdxLogFilepath
               value: /app/log/edx-fetcher-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

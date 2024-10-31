@@ -39,6 +39,8 @@ spec:
             value: 'false'
           - name: PdxLogFilepath
             value: /app/log/edx-jobeventmanager-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName
             valueFrom:
               fieldRef:
