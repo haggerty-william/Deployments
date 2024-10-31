@@ -10,10 +10,13 @@ spec:
       app: edx-filemanager
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: edx-filemanager
     spec:
+      hostAliases:
+      - ip: "10.7.0.20"
+        hostnames:
+        - "prodceph.easltech.com"
       containers:
         - name: edx-filemanager
           image: ghcr.io/easltech/edx-filemanager:v3.0.1.4
@@ -24,14 +27,16 @@ spec:
               value: edx-filemanager
             - name: PdxAppType
               value: edx
-            - name: PdxClientGroup
-              value: bbirdai
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
             - name: PdxConfigLogUpdate
               value: 'false'
+            - name: PdxLogFilepath
+              value: /app/log/edx-filemanager-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -52,11 +57,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '2'
