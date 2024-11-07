@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: database-api
-          image: ghcr.io/easltech/database-api:v1.3.4
+          image: ghcr.io/easltech/database-api:v1.3.6
           ports:
             - containerPort: 5000
               protocol: TCP
@@ -59,10 +59,6 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: status.podIP
-            - name: PdxServiceAccountName
-              valueFrom:
-                fieldRef:
-                  fieldPath: spec.serviceAccountName
           resources:
             limits:
               cpu: '2'
