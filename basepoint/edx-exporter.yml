@@ -19,7 +19,7 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v3.1.0
+          image: ghcr.io/easltech/edx-exporter:v3.1.0.1
           env:
             - name: PdxAppName
               value: edx-exporter
