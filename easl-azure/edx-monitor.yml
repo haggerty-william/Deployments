@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: edx-monitor
+  namespace: easl-azure
+spec:
+  selector:
+    matchLabels:
+      app: edx-monitor
+  template:
+    metadata:
+      labels:
+        app: edx-monitor
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-monitor
+          image: ghcr.io/easltech/edx-monitor:v1.0.3
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Release"
+          - name: PdxAppName
+            value: "edx-monitor"
+          - name: PdxAppType
+            value: "edx"
+          - name: PdxLogApiAddress
+            value: http://logging-api/Log
+          - name: PdxConfigLogUpdate
+            value: "true"
+          - name: PdxLogFilepath
+            value: /app/log/edx-monitor-.log
+          - name: PdxDbServer
+            value: mysql-az.mysql.database.azure.com
+          - name: PdxDbUser
+            valueFrom:
+              secretKeyRef:
+                 name: dblogin
+                 key: user
+          - name: PdxDbPassword
+            valueFrom:
+              secretKeyRef:
+                name: dblogin
+                key: password
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP

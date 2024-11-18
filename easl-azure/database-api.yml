@@ -1,38 +1,47 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-jobdispatcher
-  namespace: basepoint
+  name: database-api
+  namespace: easl-azure
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-jobdispatcher
+      app: database-api
   template:
     metadata:
       labels:
-        app: edx-jobdispatcher
+        app: database-api
     spec:
       containers:
-        - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.0
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.3.6
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
-            - name: PdxAppName
-              value: edx-jobdispatcher
-            - name: PdxAppType
-              value: edx
-            - name: PdxDbApiAddress
-              value: http://database-api
+            - name: PdxDbServer
+              value: mysql-az.mysql.database.azure.com
+            - name: PdxDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxLogFilepath
-              value: /app/log/edx-jobdispatcher-.log
+              value: /app/log/db-api-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -41,25 +50,19 @@ spec:
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '1'
-              memory: 1Gi
-            requests:
-              cpu: '1'
-              memory: 1Gi
+              memory: 512Mi
+              cpu: "1"
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

@@ -1,38 +1,36 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-jobdispatcher
-  namespace: basepoint
+  name: edx-filemanager
+  namespace: easl-azure
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: edx-jobdispatcher
+      app: edx-filemanager
   template:
     metadata:
       labels:
-        app: edx-jobdispatcher
+        app: edx-filemanager
     spec:
       containers:
-        - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.0
+        - name: edx-filemanager
+          image: ghcr.io/easltech/edx-filemanager:v3.0.2
           env:
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Release
             - name: PdxAppName
-              value: edx-jobdispatcher
+              value: edx-filemanager
             - name: PdxAppType
               value: edx
-            - name: PdxDbApiAddress
-              value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
+            - name: PdxDbApiAddress
+              value: http://database-api
             - name: PdxConfigLogUpdate
-              value: 'false'
+              value: 'true'
             - name: PdxLogFilepath
-              value: /app/log/edx-jobdispatcher-.log
-            - name: PdxLogExclusionExpression
-              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+              value: /app/log/edx-filemanager-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -53,14 +51,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          resources:
-            limits:
-              cpu: '1'
-              memory: 1Gi
-            requests:
-              cpu: '1'
-              memory: 1Gi
-          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /_health
@@ -71,5 +61,8 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
+      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
+  updateStrategy:
+    type: RollingUpdate

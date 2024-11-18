@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: edx-datastreamer
-  namespace: basepoint
+  name: edx-api
+  namespace: easl-azure
 spec:
   selector:
     matchLabels:
-      app: edx-datastreamer
+      app: edx-api
   template:
     metadata:
       labels:
-        app: edx-datastreamer
+        app: edx-api
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
+        - name: edx-api
+          image: ghcr.io/easltech/edx-api:v3.1.0
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           resources:
             limits:
               memory: 512Mi
               cpu: "1"
-            requests:
-              memory: 256Mi
-              cpu: "0.2"
           env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
+          - name: ASPNETCORE_URLS
+            value: http://+:5000
           - name: PdxAppName
-            value: "edx-datastreamer"
+            value: "edx-api"
           - name: PdxAppType
             value: "edx"
           - name: PdxDbApiAddress
@@ -40,7 +40,7 @@ spec:
           - name: PdxConfigLogUpdate
             value: "false"
           - name: PdxLogFilepath
-            value: /app/log/edx-datastreamer-.log
+            value: /app/log/edx-api-.log
           - name: PdxLogExclusionExpression
             value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName

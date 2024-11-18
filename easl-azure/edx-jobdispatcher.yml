@@ -2,7 +2,7 @@ kind: StatefulSet
 apiVersion: apps/v1
 metadata:
   name: edx-jobdispatcher
-  namespace: basepoint
+  namespace: easl-azure
 spec:
   replicas: 1
   selector:
@@ -15,8 +15,10 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.0
+          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.1-qa.18
           env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
             - name: ASPNETCORE_URLS
               value: http://+:5000
             - name: PdxAppName
@@ -28,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'false'
+              value: 'true'
             - name: PdxLogFilepath
               value: /app/log/edx-jobdispatcher-.log
             - name: PdxLogExclusionExpression
@@ -53,13 +55,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          resources:
-            limits:
-              cpu: '1'
-              memory: 1Gi
-            requests:
-              cpu: '1'
-              memory: 1Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

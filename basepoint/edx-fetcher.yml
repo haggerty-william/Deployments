@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-fetcher
-          image: ghcr.io/easltech/edx-fetcher:v3.0.1.1
+          image: ghcr.io/easltech/edx-fetcher:v3.1.0
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: PdxAppName
               value: edx-fetcher
             - name: PdxAppType
@@ -32,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-fetcher-.log
             - name: PdxLogExclusionExpression

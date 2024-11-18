@@ -1,46 +1,41 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: edx-datastreamer
-  namespace: basepoint
+  name: edx-errorhandler
+  namespace: easl-azure
 spec:
   selector:
     matchLabels:
-      app: edx-datastreamer
+      app: edx-errorhandler
   template:
     metadata:
       labels:
-        app: edx-datastreamer
+        app: edx-errorhandler
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
+        - name: edx-errorhandler
+          image: ghcr.io/easltech/edx-errorhandler:v3.1.0
           resources:
             limits:
               memory: 512Mi
               cpu: "1"
-            requests:
-              memory: 256Mi
-              cpu: "0.2"
           env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Production
           - name: PdxAppName
-            value: "edx-datastreamer"
+            value: edx-errorhandler
           - name: PdxAppType
-            value: "edx"
+            value: edx
           - name: PdxDbApiAddress
-            value: "http://database-api"
+            value: http://database-api
           - name: PdxLogApiAddress
-            value: "http://logging-api/Log"
+            value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: "false"
+            value: 'false'
           - name: PdxLogFilepath
-            value: /app/log/edx-datastreamer-.log
+            value: /app/log/edx-errorhandler-.log
           - name: PdxLogExclusionExpression
             value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName

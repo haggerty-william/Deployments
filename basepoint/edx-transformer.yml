@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v3.0.1.2
+          image: ghcr.io/easltech/edx-transformer:v3.1.0
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: PdxAppName
               value: edx-transformer
             - name: PdxAppType

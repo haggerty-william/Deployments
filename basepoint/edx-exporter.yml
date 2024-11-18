@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v3.0.1.3
+          image: ghcr.io/easltech/edx-exporter:v3.1.0
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: PdxAppName
               value: edx-exporter
             - name: PdxAppType
@@ -32,7 +30,7 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'true'
+              value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-exporter-.log
             - name: PdxLogExclusionExpression

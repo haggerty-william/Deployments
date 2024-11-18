@@ -1,46 +1,37 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: edx-datastreamer
-  namespace: basepoint
+  name: edx-jobeventmanager
+  namespace: easl-azure
 spec:
   selector:
     matchLabels:
-      app: edx-datastreamer
+      app: edx-jobeventmanager
   template:
     metadata:
       labels:
-        app: edx-datastreamer
+        app: edx-jobeventmanager
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       imagePullSecrets:
         - name: regcred
       containers:
-        - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: "1"
-            requests:
-              memory: 256Mi
-              cpu: "0.2"
+        - name: edx-jobeventmanager
+          image: ghcr.io/easltech/edx-jobeventmanager:v3.1.0
           env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Release
           - name: PdxAppName
-            value: "edx-datastreamer"
+            value: "edx-jobeventmanager"
           - name: PdxAppType
             value: "edx"
           - name: PdxDbApiAddress
-            value: "http://database-api"
+            value: http://database-api
           - name: PdxLogApiAddress
-            value: "http://logging-api/Log"
+            value: http://logging-api/Log
           - name: PdxConfigLogUpdate
-            value: "false"
+            value: 'false'
           - name: PdxLogFilepath
-            value: /app/log/edx-datastreamer-.log
+            value: /app/log/edx-jobeventmanager-.log
           - name: PdxLogExclusionExpression
             value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName
@@ -59,3 +50,13 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3

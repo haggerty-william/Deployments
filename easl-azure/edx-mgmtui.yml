@@ -1,36 +1,43 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-emailsender
-  namespace: basepoint
+  name: edx-mgmtui
+  namespace: easl-azure
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-emailsender
+      app: edx-mgmtui
   template:
     metadata:
       labels:
-        app: edx-emailsender
+        app: edx-mgmtui
     spec:
       containers:
-        - name: edx-emailsender
-          image: ghcr.io/easltech/edx-emailsender:v3.0.1.1
+        - name: edx-mgmtui
+          image: ghcr.io/easltech/edx-mgmtui:v3.1.0
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
             - name: ASPNETCORE_ENVIRONMENT
-              value: Release
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-emailsender
+              value: edx-mgmtui
             - name: PdxAppType
-              value: edx
+              value: mgmt
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
             - name: PdxConfigLogUpdate
               value: 'false'
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxLogFilepath
-              value: /app/log/edx-emailsender-.log
+              value: /app/log/edx-mgmtui-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -51,21 +58,14 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3
           resources:
             limits:
-              cpu: '1'
               memory: 512Mi
+              cpu: "1"
             requests:
-              cpu: 200m
               memory: 256Mi
+              cpu: "0.2"
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
       imagePullSecrets:
         - name: regcred

@@ -1,26 +1,26 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-jobdispatcher
-  namespace: basepoint
+  name: edx-exporter
+  namespace: easl-azure
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: edx-jobdispatcher
+      app: edx-exporter
   template:
     metadata:
       labels:
-        app: edx-jobdispatcher
+        app: edx-exporter
     spec:
       containers:
-        - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.0
+        - name: edx-exporter
+          image: ghcr.io/easltech/edx-exporter:v3.1.0
           env:
-            - name: ASPNETCORE_URLS
-              value: http://+:5000
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
             - name: PdxAppName
-              value: edx-jobdispatcher
+              value: edx-exporter
             - name: PdxAppType
               value: edx
             - name: PdxDbApiAddress
@@ -28,9 +28,9 @@ spec:
             - name: PdxLogApiAddress
               value: http://logging-api/Log
             - name: PdxConfigLogUpdate
-              value: 'false'
+              value: 'true'
             - name: PdxLogFilepath
-              value: /app/log/edx-jobdispatcher-.log
+              value: /app/log/edx-exporter-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
@@ -53,13 +53,6 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          resources:
-            limits:
-              cpu: '1'
-              memory: 1Gi
-            requests:
-              cpu: '1'
-              memory: 1Gi
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
