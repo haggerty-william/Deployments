@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: edx-datastreamer
-  namespace: basepoint
+  namespace: first-trust-easl
 spec:
   selector:
     matchLabels:
@@ -12,15 +12,11 @@ spec:
       labels:
         app: edx-datastreamer
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       imagePullSecrets:
         - name: regcred
       containers:
         - name: edx-datastreamer
-          image: ghcr.io/easltech/edx-datastreamer:v3.2.1
+          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
           resources:
             limits:
               memory: 512Mi
@@ -29,6 +25,8 @@ spec:
               memory: 256Mi
               cpu: "0.2"
           env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
           - name: PdxAppName
             value: "edx-datastreamer"
           - name: PdxAppType
@@ -37,6 +35,8 @@ spec:
             value: "http://database-api"
           - name: PdxLogApiAddress
             value: "http://logging-api/Log"
+          - name: PdxConfigLogUpdate
+            value: "true"
           - name: PdxLogFilepath
             value: /app/log/edx-datastreamer-.log
           - name: PdxLogExclusionExpression
@@ -57,3 +57,7 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName

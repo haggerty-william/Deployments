@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: edx-monitor
-  namespace: basepoint
+  namespace: easl-azure
 spec:
   selector:
     matchLabels:
@@ -17,13 +17,6 @@ spec:
       containers:
         - name: edx-monitor
           image: ghcr.io/easltech/edx-monitor:v1.0.3
-          resources:
-            limits:
-              memory: 512Mi
-              cpu: "1"
-            requests:
-              memory: 256Mi
-              cpu: "0.2"
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: "Release"
@@ -33,10 +26,12 @@ spec:
             value: "edx"
           - name: PdxLogApiAddress
             value: http://logging-api/Log
+          - name: PdxConfigLogUpdate
+            value: "true"
           - name: PdxLogFilepath
             value: /app/log/edx-monitor-.log
           - name: PdxDbServer
-            value: basepoint-mysql.basepoint-mysql
+            value: mysql-az.mysql.database.azure.com
           - name: PdxDbUser
             valueFrom:
               secretKeyRef:

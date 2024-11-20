@@ -1,36 +1,40 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-filemanager
-  namespace: easl-demo
+  name: edx-jobdispatcher
+  namespace: easl-azure
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-filemanager
+      app: edx-jobdispatcher
   template:
     metadata:
       labels:
-        app: edx-filemanager
+        app: edx-jobdispatcher
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       containers:
-        - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.2.1
+        - name: edx-jobdispatcher
+          image: ghcr.io/easltech/edx-jobdispatcher:v3.1.1-qa.18
           env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-filemanager
+              value: edx-jobdispatcher
             - name: PdxAppType
               value: edx
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'true'
             - name: PdxLogFilepath
-              value: /app/log/edx-filemanager-.log
+              value: /app/log/edx-jobdispatcher-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -51,13 +55,7 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.podIP
-          resources:
-            limits:
-              cpu: '2'
-              memory: 2Gi
-            requests:
-              cpu: 500m
-              memory: 1Gi
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /_health
@@ -68,8 +66,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate

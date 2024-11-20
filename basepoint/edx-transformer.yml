@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-transformer
-          image: ghcr.io/easltech/edx-transformer:v3.0.1.2
+          image: ghcr.io/easltech/edx-transformer:v3.2.1
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: PdxAppName
               value: edx-transformer
             - name: PdxAppType
@@ -35,8 +33,6 @@ spec:
               value: /app/log/edx-transformer-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
-            - name: PdxConfigLogUpdate
-              value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

@@ -1,36 +1,47 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-filemanager
-  namespace: easl-demo
+  name: database-api
+  namespace: easl-azure
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: edx-filemanager
+      app: database-api
   template:
     metadata:
       labels:
-        app: edx-filemanager
+        app: database-api
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       containers:
-        - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.2.1
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.3.6
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
-            - name: PdxAppName
-              value: edx-filemanager
-            - name: PdxAppType
-              value: edx
+            - name: PdxDbServer
+              value: mysql-az.mysql.database.azure.com
+            - name: PdxDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxDbApiAddress
-              value: http://database-api
             - name: PdxLogFilepath
-              value: /app/log/edx-filemanager-.log
+              value: /app/log/db-api-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -39,25 +50,20 @@ spec:
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '2'
-              memory: 2Gi
-            requests:
-              cpu: 500m
-              memory: 1Gi
+              memory: 512Mi
+              cpu: "1"
+          imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:
               path: /_health
@@ -68,8 +74,5 @@ spec:
             successThreshold: 1
             failureThreshold: 3
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate

@@ -1,36 +1,37 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-filemanager
-  namespace: easl-demo
+  name: mock-data-file-stream
+  namespace: easl-azure
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-filemanager
+      app: mock-data-file-stream
   template:
     metadata:
       labels:
-        app: edx-filemanager
+        app: mock-data-file-stream
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       containers:
-        - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.2.1
+        - name: mock-data-file-stream
+          image: ghcr.io/easltech/mock-data-file-stream:v1.0.2
+          ports:
+            - containerPort: 80
+              protocol: TCP
           env:
             - name: PdxAppName
-              value: edx-filemanager
+              value: mock-data-file-stream
             - name: PdxAppType
               value: edx
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
+            - name: PdxConfigLogUpdate
+              value: 'false'
             - name: PdxLogFilepath
-              value: /app/log/edx-filemanager-.log
+              value: /app/log/edx-mock-data-file-stream-.log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -54,22 +55,11 @@ spec:
           resources:
             limits:
               cpu: '2'
-              memory: 2Gi
-            requests:
-              cpu: 500m
               memory: 1Gi
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3
+            requests:
+              cpu: '1'
+              memory: 256Mi
+          imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate

@@ -1,38 +1,47 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-exporter
-  namespace: easl-demo
+  name: database-api
+  namespace: first-trust-easl
 spec:
-  replicas: 4
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-exporter
+      app: database-api
   template:
     metadata:
       labels:
-        app: edx-exporter
+        app: database-api
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       containers:
-        - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v3.2.1
+        - name: database-api
+          image: ghcr.io/easltech/database-api:v1.3.6
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
-            - name: PdxAppName
-              value: edx-exporter
-            - name: PdxAppType
-              value: edx
-            - name: PdxDbApiAddress
-              value: http://database-api
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
+            - name: PdxDbServer
+              value: ftea2peasldb.ftea2peasldb.private.mysql.database.azure.com
+            - name: PdxDbUser
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: user
+            - name: PdxDbPassword
+              valueFrom:
+                secretKeyRef:
+                  name: dblogin
+                  key: password
+            # - name: PdxLogApiAddress
+            #   value: http://logging-api/Log
             - name: PdxLogFilepath
-              value: /app/log/edx-exporter-.log
+              value: /app/log/db-api-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+            - name: PdxAppType
+              value: api
+            - name: PdxAppName
+              value: database-api
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -41,25 +50,19 @@ spec:
             - name: PdxPodName
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.name
             - name: PdxNamespace
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: metadata.namespace
             - name: PdxPodIP
               valueFrom:
                 fieldRef:
-                  apiVersion: v1
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '8'
-              memory: 10Gi
-            requests:
-              cpu: '1'
-              memory: 10Gi
+              memory: 512Mi
+              cpu: "1"
           imagePullPolicy: IfNotPresent
           livenessProbe:
             httpGet:

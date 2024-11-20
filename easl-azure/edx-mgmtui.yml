@@ -1,36 +1,43 @@
 kind: StatefulSet
 apiVersion: apps/v1
 metadata:
-  name: edx-filemanager
-  namespace: easl-demo
+  name: edx-mgmtui
+  namespace: easl-azure
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: edx-filemanager
+      app: edx-mgmtui
   template:
     metadata:
       labels:
-        app: edx-filemanager
+        app: edx-mgmtui
     spec:
-      hostAliases:
-      - ip: "10.7.0.20"
-        hostnames:
-        - "prodceph.easltech.com"
       containers:
-        - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.2.1
+        - name: edx-mgmtui
+          image: ghcr.io/easltech/edx-mgmtui:v3.1.0
+          ports:
+            - containerPort: 5000
+              protocol: TCP
           env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
             - name: PdxAppName
-              value: edx-filemanager
+              value: edx-mgmtui
             - name: PdxAppType
-              value: edx
-            - name: PdxLogApiAddress
-              value: http://logging-api/Log
+              value: mgmt
             - name: PdxDbApiAddress
               value: http://database-api
+            - name: PdxConfigLogUpdate
+              value: 'false'
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxLogFilepath
-              value: /app/log/edx-filemanager-.log
+              value: /app/log/edx-mgmtui-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
@@ -53,23 +60,12 @@ spec:
                   fieldPath: status.podIP
           resources:
             limits:
-              cpu: '2'
-              memory: 2Gi
+              memory: 512Mi
+              cpu: "1"
             requests:
-              cpu: 500m
-              memory: 1Gi
-          livenessProbe:
-            httpGet:
-              path: /_health
-              port: 5000
-              scheme: HTTP
-            timeoutSeconds: 5
-            periodSeconds: 900
-            successThreshold: 1
-            failureThreshold: 3
+              memory: 256Mi
+              cpu: "0.2"
+          imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      terminationGracePeriodSeconds: 30
       imagePullSecrets:
         - name: regcred
-  updateStrategy:
-    type: RollingUpdate
