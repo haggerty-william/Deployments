@@ -1,0 +1,62 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-filemanager
+  namespace: first-trust-easl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-filemanager
+  template:
+    metadata:
+      labels:
+        app: edx-filemanager
+    spec:
+      containers:
+        - name: edx-filemanager
+          image: ghcr.io/easltech/edx-filemanager:v3.2.1
+          env:
+            - name: PdxAppName
+              value: edx-filemanager
+            - name: PdxAppType
+              value: edx
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogFilepath
+              value: /app/log/edx-filemanager-.log
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      imagePullSecrets:
+        - name: regcred
+  updateStrategy:
+    type: RollingUpdate

@@ -1,0 +1,58 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-mgmtui
+  namespace: first-trust-easl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-mgmtui
+  template:
+    metadata:
+      labels:
+        app: edx-mgmtui
+    spec:
+      containers:
+        - name: edx-mgmtui
+          image: ghcr.io/easltech/edx-mgmtui:v3.2.1
+          ports:
+            - containerPort: 5000
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:5000
+            - name: PdxAppName
+              value: edx-mgmtui
+            - name: PdxAppType
+              value: mgmt
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogFilepath
+              value: /app/log/edx-mgmtui-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          imagePullPolicy: IfNotPresent
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred

@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: edx-datastreamer
+  namespace: first-trust-easl
+spec:
+  selector:
+    matchLabels:
+      app: edx-datastreamer
+  template:
+    metadata:
+      labels:
+        app: edx-datastreamer
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-datastreamer
+          image: ghcr.io/easltech/edx-datastreamer:v3.1.0
+          resources:
+            limits:
+              memory: 512Mi
+              cpu: "1"
+            requests:
+              memory: 256Mi
+              cpu: "0.2"
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: "Development"
+          - name: PdxAppName
+            value: "edx-datastreamer"
+          - name: PdxAppType
+            value: "edx"
+          - name: PdxDbApiAddress
+            value: "http://database-api"
+          - name: PdxLogApiAddress
+            value: "http://logging-api/Log"
+          - name: PdxConfigLogUpdate
+            value: "true"
+          - name: PdxLogFilepath
+            value: /app/log/edx-datastreamer-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP
+          - name: PdxServiceAccountName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.serviceAccountName

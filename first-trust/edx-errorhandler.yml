@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: edx-errorhandler
+  namespace: first-trust-easl
+spec:
+  selector:
+    matchLabels:
+      app: edx-errorhandler
+  template:
+    metadata:
+      labels:
+        app: edx-errorhandler
+    spec:
+      imagePullSecrets:
+        - name: regcred
+      containers:
+        - name: edx-errorhandler
+          image: ghcr.io/easltech/edx-errorhandler:v3.2.1
+          env:
+          - name: PdxAppName
+            value: edx-errorhandler
+          - name: PdxAppType
+            value: edx
+          - name: PdxDbApiAddress
+            value: http://database-api
+          - name: PdxLogFilepath
+            value: /app/log/edx-errorhandler-.log
+          - name: PdxLogExclusionExpression
+            value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+          - name: PdxNodeName
+            valueFrom:
+              fieldRef:
+                fieldPath: spec.nodeName
+          - name: PdxPodName
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: PdxNamespace
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          - name: PdxPodIP
+            valueFrom:
+              fieldRef:
+                fieldPath: status.podIP

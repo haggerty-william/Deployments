@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dblogin
+  namespace: easl-azure
+type: Opaque
+data:
+  user: bXlzcWxhZG1pbg==
+  password: TVpxTlYyVUg0QGF0NmJUdUFobzc=

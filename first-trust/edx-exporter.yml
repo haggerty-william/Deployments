@@ -1,0 +1,62 @@
+kind: StatefulSet
+apiVersion: apps/v1
+metadata:
+  name: edx-exporter
+  namespace: first-trust-easl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: edx-exporter
+  template:
+    metadata:
+      labels:
+        app: edx-exporter
+    spec:
+      containers:
+        - name: edx-exporter
+          image: ghcr.io/easltech/edx-exporter:v3.2.1
+          env:
+            - name: PdxAppName
+              value: edx-exporter
+            - name: PdxAppType
+              value: edx
+            - name: PdxDbApiAddress
+              value: http://database-api
+            - name: PdxLogFilepath
+              value: /app/log/edx-exporter-.log
+            - name: PdxLogExclusionExpression
+              value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
+            - name: PdxNodeName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: spec.nodeName
+            - name: PdxPodName
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: PdxNamespace
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.namespace
+            - name: PdxPodIP
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.podIP
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            httpGet:
+              path: /_health
+              port: 5000
+              scheme: HTTP
+            timeoutSeconds: 5
+            periodSeconds: 900
+            successThreshold: 1
+            failureThreshold: 3
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: regcred
