@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-errorhandler
-          image: ghcr.io/easltech/edx-errorhandler:v3.1.0
+          image: ghcr.io/easltech/edx-errorhandler:v3.2.1
           resources:
             limits:
               memory: 512Mi
@@ -25,8 +25,6 @@ spec:
               memory: 256Mi
               cpu: "0.2"
           env:
-          - name: ASPNETCORE_ENVIRONMENT
-            value: Production
           - name: PdxAppName
             value: edx-errorhandler
           - name: PdxAppType
@@ -35,8 +33,6 @@ spec:
             value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
-          - name: PdxConfigLogUpdate
-            value: 'false'
           - name: PdxLogFilepath
             value: /app/log/edx-errorhandler-.log
           - name: PdxLogExclusionExpression
