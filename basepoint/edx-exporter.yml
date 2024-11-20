@@ -19,7 +19,7 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-exporter
-          image: ghcr.io/easltech/edx-exporter:v3.1.0.1
+          image: ghcr.io/easltech/edx-exporter:v3.2.1
           env:
             - name: PdxAppName
               value: edx-exporter
@@ -29,8 +29,6 @@ spec:
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-exporter-.log
             - name: PdxLogExclusionExpression

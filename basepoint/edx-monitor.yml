@@ -33,8 +33,6 @@ spec:
             value: "edx"
           - name: PdxLogApiAddress
             value: http://logging-api/Log
-          - name: PdxConfigLogUpdate
-            value: "true"
           - name: PdxLogFilepath
             value: /app/log/edx-monitor-.log
           - name: PdxDbServer

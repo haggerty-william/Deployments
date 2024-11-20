@@ -19,7 +19,7 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.1.0
+          image: ghcr.io/easltech/edx-filemanager:v3.2.1
           env:
             - name: PdxAppName
               value: edx-filemanager
@@ -29,8 +29,6 @@ spec:
               value: http://logging-api/Log
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-filemanager-.log
             - name: PdxLogExclusionExpression
