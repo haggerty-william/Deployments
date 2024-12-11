@@ -16,7 +16,7 @@ spec:
         - name: regcred
       containers:
         - name: edx-errorhandler
-          image: ghcr.io/easltech/edx-errorhandler:v3.0.1.4
+          image: ghcr.io/easltech/edx-errorhandler:v3.2.1.2
           resources:
             limits:
               memory: 512Mi

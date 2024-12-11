@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-filemanager
-          image: ghcr.io/easltech/edx-filemanager:v3.0.1.4
+          image: ghcr.io/easltech/edx-filemanager:v3.2.1.2
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Release
             - name: PdxAppName
               value: edx-filemanager
             - name: PdxAppType
@@ -35,8 +33,6 @@ spec:
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

@@ -19,10 +19,8 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-fetcher
-          image: ghcr.io/easltech/edx-fetcher:v3.0.1.4
+          image: ghcr.io/easltech/edx-fetcher:v3.2.1.2
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: PdxAppName
               value: edx-fetcher
             - name: PdxAppType
@@ -35,8 +33,6 @@ spec:
               value: /app/log/edx-fetcher-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

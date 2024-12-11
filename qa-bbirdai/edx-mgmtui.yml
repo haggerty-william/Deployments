@@ -19,13 +19,11 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v3.0.1.8
+          image: ghcr.io/easltech/edx-mgmtui:v3.2.1.2
           ports:
             - containerPort: 5000
               protocol: TCP
           env:
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
             - name: ASPNETCORE_URLS
               value: http://+:5000
             - name: PdxAppName
@@ -40,8 +38,6 @@ spec:
               value: /app/log/edx-mgmtui-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
-            - name: PdxConfigLogUpdate
-              value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:
