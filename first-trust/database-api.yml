@@ -32,8 +32,8 @@ spec:
                 secretKeyRef:
                   name: dblogin
                   key: password
-            # - name: PdxLogApiAddress
-            #   value: http://logging-api/Log
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxLogFilepath
               value: /app/log/db-api-.log
             - name: PdxLogExclusionExpression

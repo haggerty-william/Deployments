@@ -25,6 +25,8 @@ spec:
               value: http://database-api
             - name: PdxLogFilepath
               value: /app/log/edx-filemanager-.log
+            - name: PdxLogApiAddress
+              value: http://logging-api/Log
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

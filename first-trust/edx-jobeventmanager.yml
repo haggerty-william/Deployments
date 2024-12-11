@@ -18,8 +18,6 @@ spec:
         - name: edx-jobeventmanager
           image: ghcr.io/easltech/edx-jobeventmanager:v3.1.0
           env:
-          - name: ASPNETCORE_ENVIRONMENT
-            value: Release
           - name: PdxAppName
             value: "edx-jobeventmanager"
           - name: PdxAppType
@@ -28,8 +26,6 @@ spec:
             value: http://database-api
           - name: PdxLogApiAddress
             value: http://logging-api/Log
-          - name: PdxConfigLogUpdate
-            value: 'false'
           - name: PdxLogFilepath
             value: /app/log/edx-jobeventmanager-.log
           - name: PdxLogExclusionExpression

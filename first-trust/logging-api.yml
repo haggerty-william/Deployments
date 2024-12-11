@@ -30,8 +30,6 @@ spec:
               value: easl-demo
             - name: PdxDbApiAddress
               value: http://database-api
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

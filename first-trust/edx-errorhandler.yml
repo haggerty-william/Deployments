@@ -26,6 +26,8 @@ spec:
             value: http://database-api
           - name: PdxLogFilepath
             value: /app/log/edx-errorhandler-.log
+          - name: PdxLogApiAddress
+            value: http://logging-api/Log
           - name: PdxLogExclusionExpression
             value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
           - name: PdxNodeName
