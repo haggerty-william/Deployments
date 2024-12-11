@@ -19,7 +19,7 @@ spec:
         - "prodceph.easltech.com"
       containers:
         - name: edx-mgmtui
-          image: ghcr.io/easltech/edx-mgmtui:v3.1.0
+          image: ghcr.io/easltech/edx-mgmtui:v3.2.1.2
           ports:
             - containerPort: 5000
               protocol: TCP
