@@ -40,8 +40,6 @@ spec:
               value: /app/log/edx-mgmtui-.log
             - name: PdxLogExclusionExpression
               value: (StartsWith(SourceContext, 'System.Net.Http.HttpClient.') or StartsWith(SourceContext, 'Serilog.') or StartsWith(SourceContext, 'Microsoft.')) and @l = 'Information'
-            - name: PdxConfigLogUpdate
-              value: 'true'
             - name: PdxNodeName
               valueFrom:
                 fieldRef:

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: edx-jobdispatcher
-          image: ghcr.io/easltech/edx-jobdispatcher:v3.0.1.4
+          image: ghcr.io/easltech/edx-jobdispatcher:v3.2.1.2
           env:
             - name: ASPNETCORE_ENVIRONMENT
               value: Production
@@ -29,8 +29,6 @@ spec:
               value: http://database-api
             - name: PdxLogApiAddress
               value: http://logging-api/Log
-            - name: PdxConfigLogUpdate
-              value: 'false'
             - name: PdxLogFilepath
               value: /app/log/edx-jobdispatcher-.log
             - name: PdxLogExclusionExpression
